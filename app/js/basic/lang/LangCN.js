@@ -5,7 +5,7 @@
 
 /* globals iS3 */
 
-iS3.langCN = function () {
+iS3.LangCN = function () {
     // common
     this.cancel = '取消';
     this.save = '保存';

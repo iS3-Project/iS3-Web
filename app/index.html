@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>A WebGIS Application</title>
+    <meta name="author" content="Xiaodong Lin">
+    <link href="external/ol3-3.19.1/ol.min.css" rel="stylesheet">
+    <link href="css/webgis.min.css" rel="stylesheet">
+    <script type="text/javascript" src="external/ol3-3.19.1/ol.min.js"></script>
+    <script type="text/javascript" src="external/jquery-3.1.1/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="external/jsts-0.17.0/javascript.util.min.js"></script>
+    <script type="text/javascript" src="external/jsts-0.17.0/jsts.min.js"></script>
+    <script type="text/javascript" src="external/mousetrap/mousetrap.min.js"></script>
+    <script type="text/javascript" src="js/webgis.min.js"></script>
+</head>
+<body>
+<div class="map-container">
+    <div id="toolbar" class="toolbar"></div>
+    <div id="layertree" class="layertree"></div>
+    <div id="map" class="map"></div>
+    <div class="notification-bar">
+        <div id="messageBar" class="message-bar"></div>
+        <div id="projection"></div>
+        <div id="coordinates"></div>
+    </div>
+</div>
+<script>
+
+/* globals iS3 */
+/* globals ol */
+
+document.addEventListener('DOMContentLoaded', init);
+function init() {
+    document.removeEventListener('DOMContentLoaded', init);
+
+    $.getJSON('./config.json', function (json) {
+
+        // initial project, global variable
+
+        window.iS3Project = new iS3.Project({config: json});
+        var iS3Project = window.iS3Project;
+
+        // initial projection options
+        var projControl = new iS3.Toolbar.Projection({
+            target: 'projection'
+        });
+
+        // initial map
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    preload: Infinity,
+                    source: new ol.source.OSM({
+                        wrapX: false
+                    }),
+                    visible: true,
+                    id: 'Local:Local:OpenStreet Map',
+                    layertype: iS3.layerDef.layerType.BASE_MAP
+                }),
+                new ol.layer.Tile({
+                    preload: Infinity,
+                    source: new ol.source.BingMaps({
+                        key: 'AuZqkxV8gt-r1OwAN_2QnolUWIc5wcL-m3ncZJMD-h9LdGcIBHO7FXnThf1Ct-8z',
+                        imagerySet: 'Aerial',
+                        wrapX: false
+                    }),
+                    visible: false,
+                    id: 'Local:Local:Bing Map',
+                    layertype: iS3.layerDef.layerType.BASE_MAP
+                }),
+                new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        wrapX: false
+                    }),
+                    id: 'Local:Local:Drawing Layer'
+                })
+            ],
+            controls: [
+                // Define some new controls
+                new ol.control.MousePosition({
+                    coordinateFormat: function (coordinates) {
+                        var coordX = coordinates[0].toFixed(3);
+                        var coordY = coordinates[1].toFixed(3);
+                        return coordX + ', ' + coordY;
+                    },
+                    target: 'coordinates'
+                }),
+                projControl
+            ],
+            view: new ol.View({
+                center: [0, 0],
+                zoom: 3
+            }),
+            loadTilesWhileAnimating: true,
+            loadTilesWhileInteracting: true
+        });
+        iS3Project.setMap(map);
+
+        // initial message output
+        var message = document.getElementById('messageBar') || document.createElement('span');
+        var observer = new MutationObserver(function (mutations) {
+            if (mutations[0].target.textContent) {
+                var oldText = mutations[0].target.textContent;
+                var timeoutFunction = function () {
+                    if (oldText !== mutations[0].target.textContent) {
+                        oldText = mutations[0].target.textContent;
+                        setTimeout(timeoutFunction, 10000);
+                    } else {
+                        oldText = '';
+                        mutations[0].target.textContent = '';
+                    }
+                };
+                setTimeout(timeoutFunction, 10000);
+            }
+        });
+        observer.observe(message, {childList: true});
+        iS3Project.setMessage(message);
+
+        // initial layertree
+        var layertree = new iS3.Layertree({
+            parentObj: iS3Project,
+            target: 'layertree',
+            buttons: ['addwms', 'newlayer', 'addinput', 'outputlayer', 'deletelayer']
+
+        });
+
+        layertree.createRegistry(map.getLayers().item(0));
+        layertree.createRegistry(map.getLayers().item(1));
+        iS3Project.setLayertree(layertree);
+
+        // initial toolbar
+        var toolbar = new iS3.Toolbar({
+            parentObj: iS3Project,
+            target: 'toolbar',
+            buttons: ['zoomGroup', 'selectGroup', 'drawGroup', 'measureGroup',
+                'queryGroup', 'customGroup', 'testGroup']
+        });
+        iS3Project.setToolbar(toolbar);
+
+        // load project
+        if (iS3Project.getConfig().projectDef) {
+            iS3Project.getConfig().projectDef.init();
+        }
+    });
+}
+</script>
+</body>
+</html>

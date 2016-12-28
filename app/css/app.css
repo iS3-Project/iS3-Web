@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+}
+.map-container {
+    width: 100%;
+    height: 100%; /*Fallback*/
+    height: 100vh;
+}
+.map {
+    max-width: 80%;
+    height: calc(100% - 3.5em);
+    overflow: hidden;
+    position: relative;
+}
+.notification-bar {
+    width: 100%;
+    height: 1.5em;
+    display: table;
+}
+.notification-bar > div {
+    height: 100%;
+    display: table-cell;
+    border: 1px solid grey;
+    width: 34%;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.notification-bar .message-bar {
+    width: 60%;
+}
+.notification-bar .ol-mouse-position {
+    font-family: monospace;
+    text-align: center;
+    position: static;
+}
+.notification-bar #projection {
+    width: 15%;
+    text-align: center;
+}
+.notification-bar #projection select {
+    background: none;
+    border: none;
+    outline: 0;
+}

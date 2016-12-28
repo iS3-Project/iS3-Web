@@ -307,7 +307,7 @@ iS3.geoRequest.geojsonToShp = function (GeoJson, shpName) {
  * @param {Array} options Options
  * @param {Function} callback Callback function
  */
-iS3.geoRequest.ShapeToGeojson = function (file, options, callback) {
+iS3.geoRequest.shapeToGeojson = function (file, options, callback) {
     var formdata = new FormData();
     formdata.append('upload', file);
     formdata.append('targetSrs', options.targetSrs.getCode());

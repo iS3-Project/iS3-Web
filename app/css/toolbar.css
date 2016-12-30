@@ -26,7 +26,7 @@
     vertical-align: middle;
     background-size: 1em;
     background-repeat: no-repeat;
-    background-position: 50% 0%;
+    background-position: 50% 50%;
 }
 
 .toolbar .ol-control button:hover {
@@ -155,11 +155,11 @@
 }
 
 .iS3-feature-popup .iS3-feature-form .delete {
-    background-image: url(../../res/button_delete.png);
+
 }
 
 .iS3-feature-popup .iS3-feature-form .save {
-    background-image: url(../../res/button_save.png);
+
 }
 
 .ol-measure-tip {

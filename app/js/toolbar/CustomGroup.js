@@ -15,7 +15,7 @@
  */
 iS3.toolbar.CustomGroup = function (options) {
 
-    iS3.toolGroup.call(this, options);
+    iS3.ToolGroup.call(this, options);
 
     this.parentObj = options.parentObj;
     this.layertree = options.parentObj.layertree;

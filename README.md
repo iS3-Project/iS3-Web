@@ -8,7 +8,7 @@ Building WebGIS requires Node and npm (v4.4.4+) be [installed](http://nodejs.org
 
     npm install -g gulp
 
-## Quick Start
+## Build the project
 
 To install all project dependencies simply run
 
@@ -26,10 +26,10 @@ For convenience of debuging, simply run
 
 Enter `localhost:9080` in your browser to view the web application
 
-## Minify Build
+## Configuration
 
-To generate the minified .js and .css files, just run
+Update the `/config.json` file to change the configuration of this project.
 
-	gulp build
-
-Then modify `main.js` and `main.css` in the `index.html` file to `main.min.js` and `main.min.css` respectively.
+1. server: The geoserver website. If you do not have one, a remote one can be used: 'http://demo.opengeo.org/geoserver'
+2. proxy: A proxy project can be add. Please refer to [gis-platform](http://icode.baidu.com/repo/baidu%2Fbee%2Fgis-platform/files/master/tree/)
+3. lang: CN or EN

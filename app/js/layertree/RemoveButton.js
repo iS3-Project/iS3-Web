@@ -14,7 +14,7 @@
  */
 iS3.layertree.RemoveButton = function (options) {
 
-    iS3.layertree.baseButton.call(this, options);
+    iS3.layertree.BaseButton.call(this, options);
 
     var layertree = options.parentObj;
     var buttonElem = this.button;

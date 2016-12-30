@@ -71,49 +71,49 @@ iS3.toolbar.Toolbar.prototype.addGroup = function (name) {
 
     switch (name) {
         case 'zoomGroup':
-            this.addToolGroup(new iS3.toolbar.Toolbar.ZoomGroup({
+            this.addToolGroup(new iS3.toolbar.ZoomGroup({
                 parentObj: this,
                 id: 'zoomGroup',
                 name: lang.zoomGroupName
             }));
             break;
         case 'selectGroup':
-            this.addToolGroup(new iS3.toolbar.Toolbar.SelectGroup({
+            this.addToolGroup(new iS3.toolbar.SelectGroup({
                 parentObj: this,
                 id: 'selectGroup',
                 name: lang.selectGroupName
             }));
             break;
         case 'drawGroup':
-            this.addToolGroup(new iS3.toolbar.Toolbar.DrawGroup({
+            this.addToolGroup(new iS3.toolbar.DrawGroup({
                 parentObj: this,
                 id: 'drawGroup',
                 name: lang.drawGroupName
             }));
             break;
         case 'measureGroup':
-            this.addToolGroup(new iS3.toolbar.Toolbar.MeasureGroup({
+            this.addToolGroup(new iS3.toolbar.MeasureGroup({
                 parentObj: this,
                 id: 'measureGroup',
                 name: lang.measureGroupName
             }));
             break;
         case 'queryGroup':
-            this.addToolGroup(new iS3.toolbar.Toolbar.QueryGroup({
+            this.addToolGroup(new iS3.toolbar.QueryGroup({
                 parentObj: this,
                 id: 'queryGroup',
                 name: lang.queryGroupName
             }));
             break;
         case 'customGroup':
-            this.addToolGroup(new iS3.toolbar.Toolbar.CustomGroup({
+            this.addToolGroup(new iS3.toolbar.CustomGroup({
                 parentObj: this,
                 id: 'customGroup',
                 name: lang.customGroupName
             }));
             break;
         case 'testGroup':
-            this.addToolGroup(new iS3.toolbar.Toolbar.TestGroup({parentObj: this, id: 'testGroup', name: 'test'}));
+            this.addToolGroup(new iS3.toolbar.TestGroup({parentObj: this, id: 'testGroup', name: 'test'}));
             break;
         default:
             return false;

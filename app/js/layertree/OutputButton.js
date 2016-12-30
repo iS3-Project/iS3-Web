@@ -49,7 +49,7 @@ iS3.layertree.OutputButton = function (options) {
     });
     return buttonElem;
 };
-iS3.inherits(iS3.layertree.OutputButton, iS3.layertree.baseButton);
+iS3.inherits(iS3.layertree.OutputButton, iS3.layertree.BaseButton);
 
 /**
  * Create new button UI

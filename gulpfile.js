@@ -11,17 +11,16 @@ var jshint = require('gulp-jshint');
 var connect = require('gulp-connect');
 
 var jsOrder = [
-    'app/js/core/app.js',
     'app/js/core/iS3.js',
     'app/js/basic/*.js',
-    'app/js/core/projectDef/projectDef.js',
+    'app/js/core/projectDef/ProjectDef.js',
     'app/js/core/projectDef/*.js',
     'app/js/core/*.js',
-    'app/js/layertree/layertree.js',
+    'app/js/layertree/Layertree.js',
     'app/js/layertree/*.js',
-    'app/js/layertree/layerContainer/basicContainer.js',
+    'app/js/layertree/layerContainer/BasicContainer.js',
     'app/js/layertree/layerContainer/*.js',
-    'app/js/toolbar/toolbar.js',
+    'app/js/toolbar/Toolbar.js',
     'app/js/toolbar/*.js',
     'app/js/format/format.js',
     'app/js/format/*.js',
@@ -32,6 +31,18 @@ gulp.task('jshint', function () {
     return gulp.src('app/js/**/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
+});
+
+gulp.task('concatcss', function () {
+    return gulp.src('app/css/**/*.css')
+        .pipe(concat('webgis-debug.css'))
+        .pipe(gulp.dest('build/css'));
+});
+
+gulp.task('concatjs', function () {
+    return gulp.src(jsOrder)
+        .pipe(concat('webgis-debug.js'))
+        .pipe(gulp.dest('build/js'));
 });
 
 gulp.task('minifycss', function () {
@@ -46,6 +57,15 @@ gulp.task('minifyjs', function () {
         .pipe(concat('webgis.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('copydebughtml', function () {
+    gulp.src('app/index-debug.html')
+        .pipe(concat('index.html'))
+        .pipe(gulp.dest('build'));
+
+    gulp.src('./config.json')
+        .pipe(gulp.dest('build'));
 });
 
 gulp.task('copyhtml', function () {
@@ -78,7 +98,7 @@ gulp.task('watch', function () {
         gulp.run('concatcss');
     });
     gulp.watch('app/*.*', function () {
-        gulp.run('copyhtml');
+        gulp.run('copydebughtml');
     });
 });
 
@@ -95,15 +115,24 @@ gulp.task('reload', function () {
         connect.reload();
     });
 });
-
+/*
 gulp.task('default', ['jshint'], function () {
-    gulp.start('minifyjs', 'minifycss', 'copyall');
+    gulp.start('concatjs', 'concatcss', 'minifyjs', 'minifycss', 'copyall');
 });
 
 gulp.task('debug', ['jshint'], function () {
-    gulp.start('minifyjs', 'minifycss', 'copyall', 'connect', 'reload', 'watch');
+    gulp.start('concatjs', 'concatcss', 'copydebughtml', 'copyexternal', 'copyimg', 'connect', 'reload', 'watch');
 });
 
 gulp.task('build', ['jshint'], function () {
-    gulp.start('minifyjs', 'minifycss', 'copyall');
+    gulp.start('concatjs', 'concatcss', 'minifyjs', 'minifycss', 'copyall');
+});
+*/
+
+gulp.task('default', function () {
+    gulp.start('concatjs', 'concatcss', 'minifyjs', 'minifycss', 'copyall');
+});
+
+gulp.task('debug', function () {
+    gulp.start('concatjs', 'concatcss', 'copydebughtml', 'copyexternal', 'copyimg', 'connect', 'reload', 'watch');
 });

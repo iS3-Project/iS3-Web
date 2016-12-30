@@ -102,7 +102,7 @@ iS3.Project.prototype.getLayertree = function () {
  * @param {iS3.layertree} layertree Layertree
  */
 iS3.Project.prototype.setLayertree = function (layertree) {
-    if (layertree instanceof iS3.layertree) {
+    if (layertree instanceof iS3.layertree.Layertree) {
         this._layertree = layertree;
     } else {
         throw new Error('layertree must be an instance of iS3.layertree');
@@ -124,7 +124,7 @@ iS3.Project.prototype.getToolbar = function () {
  * @param {iS3.toolbar} toolbar Toolbar
  */
 iS3.Project.prototype.setToolbar = function (toolbar) {
-    if (toolbar instanceof iS3.toolbar) {
+    if (toolbar instanceof iS3.toolbar.Toolbar) {
         this._toolbar = toolbar;
     } else {
         throw new Error('toolbar must be an instance of iS3.toolbar');

@@ -236,7 +236,7 @@ iS3.layertree.Layertree.prototype.createRegistry = function (layer, buffer) {
 };
 
 /**
- * Remove layer
+ * Remove layer.
  *
  * @param {ol.layer} layer Removed layer
  * @return {iS3.layertree.Layertree} Layer tree

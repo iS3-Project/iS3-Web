@@ -18,7 +18,7 @@ iS3.layertree = function (options) {
 };
 
 /**
- * Construction function
+ * Construction function.
  *
  * @param {Array} options Options
  * @constructor
@@ -26,7 +26,7 @@ iS3.layertree = function (options) {
 iS3.layertree.Layertree = function (options) {
     'use strict';
 
-    if (!(this instanceof iS3.layertree)) {
+    if (!(this instanceof iS3.layertree.Layertree)) {
         throw new Error('layerTree must be constructed with the new keyword.');
     }
     if (typeof options === 'object' && options.parentObj && options.target) {
@@ -219,10 +219,10 @@ iS3.layertree.Layertree.prototype.createRegistry = function (layer, buffer) {
 
     var layerDiv;
     switch (layertype) {
-        case iS3.layerDef.layerType.BASE_MAP:
+        case iS3.LayerDef.layerType.BASE_MAP:
             layerDiv = new iS3.layertree.BaseMapContainer(paras).init();
             break;
-        case iS3.layerDef.layerType.PANOPOINT:
+        case iS3.LayerDef.layerType.PANOPOINT:
             layerDiv = new iS3.layertree.PanopointContainer(paras).init();
             break;
         default:
@@ -236,7 +236,7 @@ iS3.layertree.Layertree.prototype.createRegistry = function (layer, buffer) {
 };
 
 /**
- * Remove layer
+ * Remove layer.
  *
  * @param {ol.layer} layer Removed layer
  * @return {iS3.layertree.Layertree} Layer tree

@@ -1,5 +1,5 @@
 /**
- * @file The config file for gulp
+ * @file The config file for gulp.
  * @author Lin Xiaodong<linxdcn@gmail.com>
  */
 var gulp = require('gulp');

@@ -112,7 +112,7 @@ iS3.layertree.PanopointContainer.prototype.addFilter = function () {
     pointSelect.appendChild(iS3.domTool.createOption(lang.isolatedDeletedPoints, 'status=2'));
     pointSelect.appendChild(iS3.domTool.createOption(lang.repeatedDeletedPoints, 'status=3'));
     pointSelect.appendChild(iS3.domTool.createOption(lang.linkDeletedPoints, 'status=4'));
-    pointSelect.appendChild(iS3.domTool.createOption(lang.allPanopoints, '1=1'));
+    pointSelect.appendChild(iS3.domTool.createOption(lang.allPanopoints, 'status<>-1'));
 
     filterForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
@@ -120,8 +120,9 @@ iS3.layertree.PanopointContainer.prototype.addFilter = function () {
             var source = layer.getSource();
             var filter = pointSelect.value;
             var params = source.getParams();
+            console.log(params);
             params.t = new Date().getMilliseconds();
-            params.CQLFILTER = filter;
+            params.CQL_FILTER = filter;
             source.updateParams(params);
         }
     });
@@ -131,7 +132,7 @@ iS3.layertree.PanopointContainer.prototype.addFilter = function () {
             var source = layer.getSource();
             var params = source.getParams();
             params.t = new Date().getMilliseconds();
-            params.CQLFILTER = null;
+            params.CQL_FILTER = null;
             source.updateParams(params);
         }
     };

@@ -206,13 +206,13 @@ iS3.layertree.Layertree.prototype.createRegistry = function (layer, buffer) {
         layertype = layer.get('layertype');
     } else {
         if (layer.get('id').indexOf('panopoint') !== -1) {
-            layertype = iS3.layerDef.layerType.PANOPOINT;
+            layertype = iS3.LayerDef.layerType.PANOPOINT;
         }
         else if (layer.get('id').indexOf('PANOTIME') !== -1) {
-            layertype = iS3.layerDef.layerType.PANOTIMEB;
+            layertype = iS3.LayerDef.layerType.PANOTIMEB;
         }
         else {
-            layertype = iS3.layerDef.layerType.UNKNOWN;
+            layertype = iS3.LayerDef.layerType.UNKNOWN;
         }
     }
     layerDef.layertype = layertype;

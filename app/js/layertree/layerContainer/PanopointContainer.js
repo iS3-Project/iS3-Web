@@ -14,7 +14,7 @@
  * @constructor
  */
 iS3.layertree.PanopointContainer = function (options) {
-    iS3.layertree.basicContainer.call(this, options);
+    iS3.layertree.BasicContainer.call(this, options);
 };
 iS3.inherits(iS3.layertree.PanopointContainer, iS3.layertree.BasicContainer);
 

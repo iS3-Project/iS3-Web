@@ -62,7 +62,10 @@ iS3.toolbar.TestGroup.prototype.test = function (layertree) {
     var features = layer.getSource().getFeatures();
     var panob = new iS3.format.PanotimeB();
     var json = panob.toJson(features);
+    /*
     $.post('http://localhost/v1/test', {
         json: json
     });
+    */
+    console.log(json);
 };

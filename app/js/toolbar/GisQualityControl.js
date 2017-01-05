@@ -50,7 +50,7 @@ iS3.toolbar.GisQualityControl = function (toolbar) {
                 for (var child in childrent) {
                     if (childrent[child].nodeType === 1
                         && toolbar.layertree.getLayerDefById(childrent[child].id).layertype
-                        === iS3.layerDef.layerType.PANOPOINT) {
+                        === iS3.LayerDef.layerType.PANOPOINT) {
                         var option = document.createElement('option');
                         option.value = childrent[child].id;
                         option.textContent = childrent[child].title;
@@ -395,7 +395,7 @@ iS3.toolbar.GisQualityControl.autoMarkPicturedPoints = function (file, status, c
 iS3.toolbar.GisQualityControl.autoMarkIsolatedPoints = function (status, color) {
     var buffer = iS3.topology.trueDist2MapDist(200);
     var layertree = iS3Project.getLayertree();
-    if (layertree.getLayerDefById(layertree.selectedLayer.id).layertype !== iS3.layerDef.layerType.PANOTIMEB) {
+    if (layertree.getLayerDefById(layertree.selectedLayer.id).layertype !== iS3.LayerDef.layerType.PANOTIMEB) {
         return;
     }
     var minarea = 3.14 * buffer * buffer * 2.0;
@@ -443,7 +443,7 @@ iS3.toolbar.GisQualityControl.autoMarkIsolatedPoints = function (status, color) 
 iS3.toolbar.GisQualityControl.autoMarkRepeatedPoints = function (targetLayer, status, color) {
     var buffer = iS3.topology.trueDist2MapDist(5);
     var layertree = iS3Project.getLayertree();
-    if (layertree.getLayerDefById(layertree.selectedLayer.id).layertype !== iS3.layerDef.layerType.PANOTIMEB) {
+    if (layertree.getLayerDefById(layertree.selectedLayer.id).layertype !== iS3.LayerDef.layerType.PANOTIMEB) {
         document.getElementById('auto-repeated-mark').disabled = false;
         return;
     }

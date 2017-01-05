@@ -19,7 +19,7 @@
  * @constructor
  */
 iS3.format.PanotimeB = function (options) {
-    this.name = options.name;
+    this.name = options ? options.name : null;
     this.headers = [
         {name: 'captureid', type: 'string'},
         {name: 'date', type: 'string'},
@@ -177,6 +177,7 @@ iS3.format.PanotimeB.prototype.toJson = function (features, options) {
     var headers = this.headers;
     var hstatus = 'status';
     var hcardaySeries = 'carday_series';
+    var hkeydate = 'keydate';
 
     for (var i = 0; i < features.length; i++) {
         var tmp = {};
@@ -194,6 +195,12 @@ iS3.format.PanotimeB.prototype.toJson = function (features, options) {
             tmp[hstatus] = features[i].get(hstatus);
         } else {
             tmp[hstatus] = 0;
+        }
+
+        if (features[i].get(hkeydate)) {
+            tmp[hkeydate] = features[i].get(hkeydate);
+        } else {
+            tmp[hkeydate] = features[i].get('kydate_id').split('_')[0].toLowerCase();
         }
 
         result.push(tmp);

@@ -47,6 +47,7 @@ iS3.toolbar.GisQualityControl = function (toolbar) {
                 // initial source layer and target layer
                 var childrent = toolbar.layertree.layerContainer.childNodes;
                 var target = document.getElementById('gis-qualified-target');
+                iS3.domTool.removeContent(target);
                 for (var child in childrent) {
                     if (childrent[child].nodeType === 1
                         && toolbar.layertree.getLayerDefById(childrent[child].id).layertype
@@ -103,11 +104,23 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     firstRow.appendChild(row11);
 
     var row12 = document.createElement('td');
+    var pictureAuto = document.createElement('input');
+    pictureAuto.type = 'button';
+    pictureAuto.value = lang.auto;
+    pictureAuto.onclick = function () {
+        iS3.toolbar.GisQualityControl.autoMarkPicturedPoints(thisCpy.PICTURE, markedColor)
+            .done(function (count) {
+                row11.textContent = lang.pictureDeletedPoints + '(' + count + ')';
+            });
+    };
+    row12.appendChild(pictureAuto);
+    firstRow.appendChild(row12);
+
     var fileInput = document.createElement('input');
     fileInput.name = 'file';
     fileInput.type = 'file';
     fileInput.onchange = function () {
-        iS3.toolbar.GisQualityControl.autoMarkPicturedPoints(fileInput.files[0], thisCpy.PICTURE, pictureColor);
+        iS3.toolbar.GisQualityControl.markPicturedPoints(fileInput.files[0], thisCpy.PICTURE, markedColor);
     };
     row12.appendChild(fileInput);
     firstRow.appendChild(row12);
@@ -355,13 +368,54 @@ iS3.toolbar.GisQualityControl.mergePoints = function (selectedLayer, targetLayer
 };
 
 /**
- * Mark picture deleted points
+ * Auto mark picture deleted points from file
+ *
+ * @param {string} status Status
+ * @param {color} color Color
+ * @return {Promise} The jquery Deferred's Promise object
+ */
+iS3.toolbar.GisQualityControl.autoMarkPicturedPoints = function (status, color) {
+
+    var jdeferred = $.Deferred;
+    var deferred = jdeferred();
+
+    var layertree = iS3Project.getLayertree();
+    var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
+    var proxy = iS3Project.getConfig().proxy;
+
+    $.post(proxy + '/gischeck/upload/exp', {
+        cardayID: layerDef.name.split(':')[1]
+    }).done(function (data) {
+        var pattern = /'(.*?)'/g;
+        var ids = [];
+        var m;
+        while (m = pattern.exec(data)) {
+            ids.push(m[1]);
+        }
+        var pictureFeatures = [];
+        var features = layertree.getLayerById(layertree.selectedLayer.id).getSource().getFeatures();
+        for (var i = 0; i < features.length; i++) {
+            for (var j = 0; j < ids.length; j++) {
+                if (features[i].get('kydate_id') === ids[j]) {
+                    pictureFeatures.push(features[i]);
+                    break;
+                }
+            }
+        }
+        iS3.toolbar.GisQualityControl.markFeatures(pictureFeatures, status, color);
+        deferred.resolve(pictureFeatures.length);
+    });
+    return deferred.promise();
+};
+
+/**
+ * Mark picture deleted points from file
  *
  * @param {file} file File
  * @param {string} status Status
  * @param {color} color Color
  */
-iS3.toolbar.GisQualityControl.autoMarkPicturedPoints = function (file, status, color) {
+iS3.toolbar.GisQualityControl.markPicturedPoints = function (file, status, color) {
     var fr = new FileReader();
     var features = iS3Project.getLayertree().getLayerById(
         iS3Project.getLayertree().selectedLayer.id).getSource().getFeatures();
@@ -376,7 +430,7 @@ iS3.toolbar.GisQualityControl.autoMarkPicturedPoints = function (file, status, c
         var pictureFeatures = [];
         for (var i = 0; i < features.length; i++) {
             for (var j = 0; j < ids.length; j++) {
-                if (features[i].get('kydateid') === ids[j]) {
+                if (features[i].get('kydate_id') === ids[j]) {
                     pictureFeatures.push(features[i]);
                     break;
                 }
@@ -398,7 +452,7 @@ iS3.toolbar.GisQualityControl.autoMarkIsolatedPoints = function (status, color) 
     if (layertree.getLayerDefById(layertree.selectedLayer.id).layertype !== iS3.LayerDef.layerType.PANOTIMEB) {
         return;
     }
-    var minarea = 3.14 * buffer * buffer * 2.0;
+    var minarea = 3.14 * buffer * buffer / 4.0 * 2.0;
     var features = layertree.getLayerById(layertree.selectedLayer.id).getSource().getFeatures();
     var jstsgeom = [];
     var isolatedgeom = [];
@@ -422,6 +476,7 @@ iS3.toolbar.GisQualityControl.autoMarkIsolatedPoints = function (status, color) 
                     tempfeatures.push(features[j]);
                 }
             }
+            console.log(tempfeatures.length);
             if (tempfeatures.length < 4) {
                 tempfeatures.forEach(function (feature) {
                     isolatedFeatures.push(feature);

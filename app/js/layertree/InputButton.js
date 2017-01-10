@@ -113,10 +113,6 @@ iS3.layertree.InputButton.prototype.addInputLayer = function (form) {
             style: iS3.style.getDefault()
         });
         layer.set('id', id);
-        iS3Project.getLayerDefs()[id] = new iS3.LayerDef({
-            id: id,
-            name: 'Local:' + file.name.substr(0, file.name.lastIndexOf('.'))
-        });
         layertree.addBufferIcon(layer);
         layertree.map.addLayer(layer);
         layertree.message.textContent = 'Vector layer added successfully.';

@@ -67,5 +67,6 @@ iS3.toolbar.TestGroup.prototype.test = function (layertree) {
         json: json
     });
     */
-    console.log(json);
+    var toolbar = iS3Project.getToolbar();
+    console.log(toolbar.selectInteraction.getFeatures().getArray()['PANOTIME201507216I_Btest.1']);
 };

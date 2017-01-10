@@ -60,7 +60,8 @@ iS3.Project = function (options) {
      * @type {iS3.config}
      * @private
      */
-    this._config = new iS3.Config({json: options.config});
+    var config = options.config || null;
+    this._config = new iS3.Config({config: config});
 
     iS3Project = this;
 };

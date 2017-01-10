@@ -183,10 +183,11 @@ iS3.layertree.Layertree.prototype.createRegistry = function (layer, buffer) {
         var name = names[names.length - 2] + ':' + names[names.length - 1];
         var server = layer.get('id').substring(0, layer.get('id').length - name.length - 1);
         layerDef = new iS3.LayerDef({
-            server: server,
             id: layer.get('id'),
+            server: server,
+            featurePrefix: names[names.length - 2],
             name: name,
-            featurePrefix: names[names.length - 2]
+            featureType: name.split(':')[1]
         });
         iS3Project.getLayerDefs()[layer.get('id')] = layerDef;
     }

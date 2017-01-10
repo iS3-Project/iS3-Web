@@ -120,7 +120,6 @@ iS3.layertree.PanopointContainer.prototype.addFilter = function () {
             var source = layer.getSource();
             var filter = pointSelect.value;
             var params = source.getParams();
-            console.log(params);
             params.t = new Date().getMilliseconds();
             params.CQL_FILTER = filter;
             source.updateParams(params);

@@ -137,23 +137,6 @@ iS3.layertree.WmsButton.prototype.checkWmsLayer = function (form) {
                 if (layers.length > 0 && crs.indexOf(currentProj) > -1) {
                     for (var i = 0; i < layers.length; i += 1) {
                         form.layer.appendChild(iS3.domTool.createOption(layers[i].Name));
-
-                        // store all layer information, to add more layer information later
-                        var layerDefs = layertree.parentObj.getLayerDefs();
-                        var boundingBox = null;
-                        layers[i].BoundingBox.forEach(function (bbox) {
-                            if (bbox.crs.indexOf('EPSG') !== -1) {
-                                boundingBox = bbox;
-                            }
-                        });
-                        layerDefs[(form.server.value + ':' + layers[i].Name)] = new iS3.LayerDef({
-                            id: form.server.value + ':' + layers[i].Name,
-                            server: form.server.value,
-                            featurePrefix: form.layer.value.split(':')[0],
-                            name: layers[i].Name,
-                            projection: ol.proj.get(boundingBox.crs),
-                            extent: boundingBox.extent
-                        });
                     }
                     var formats = capabilities.Capability.Request.GetMap.Format;
                     for (i = 0; i < formats.length; i += 1) {

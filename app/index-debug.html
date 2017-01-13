@@ -74,6 +74,9 @@ function init() {
                     id: 'Local:Local:Drawing Layer'
                 })
             ],
+            interactions: ol.interaction.defaults({
+                dragPan: false
+            }),
             controls: [
                 // Define some new controls
                 new ol.control.MousePosition({

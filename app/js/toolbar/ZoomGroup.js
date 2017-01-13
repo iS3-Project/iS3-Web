@@ -43,7 +43,25 @@ iS3.toolbar.ZoomGroup.prototype.init = function () {
      }, this);
      */
 
-    this.loadZoomFull().loadZoomToLayer().loadZoomToSelected();
+    this.loadDragPan().loadZoomFull().loadZoomToLayer().loadZoomToSelected();
+};
+
+/**
+ * Load draw point
+ *
+ * @return {iS3.toolbar.ZoomGroup}
+ */
+iS3.toolbar.ZoomGroup.prototype.loadDragPan = function () {
+    var dragPan = new ol.control.Interaction({
+        label: ' ',
+        tipLabel: iS3Project.getConfig().lang.addPointsTip,
+        className: 'ol-dragpan ol-unselectable ol-control',
+        interaction: new ol.interaction.DragPan(),
+        alive: true
+    });
+    dragPan.id = 'dragPan';
+    this.add(dragPan);
+    return this;
 };
 
 /**

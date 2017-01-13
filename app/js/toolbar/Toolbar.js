@@ -134,7 +134,9 @@ iS3.toolbar.Toolbar.prototype.addControl = function (control) {
         control.on('change:active', function () {
             if (control.get('active')) {
                 this.groups.getAllTools().forEach(function (controlToDisable) {
-                    if (controlToDisable.get('type') === 'toggle' && controlToDisable !== control) {
+                    if (controlToDisable.get('type') === 'toggle'
+                        && controlToDisable.get('alive') === false
+                        && controlToDisable !== control) {
                         controlToDisable.set('active', false);
                     }
                 });

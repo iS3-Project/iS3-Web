@@ -44,6 +44,7 @@ ol.control.Interaction = function (options) {
         interaction: interaction,
         active: false,
         type: 'toggle',
+        alive: options.alive || false,
         destroyFunction: function (evt) {
             if (evt.element === thisCpy) {
                 this.removeInteraction(thisCpy.get('interaction'));

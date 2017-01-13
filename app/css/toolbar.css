@@ -95,6 +95,10 @@
     background-image: url(../img/button_dragfeat.png);
 }
 
+.toolbar .ol-dragpan button {
+    background-image: url(../img/button_handdrag.png);
+}
+
 .toolbar .ol-zoom-extent button {
     background-image: url(../img/button_zoom_extent.png);
 }

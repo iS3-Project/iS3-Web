@@ -39,7 +39,8 @@ iS3.toolbar.BasicControl = function (options) {
     if (options.type && options.type === 'toggle') {
         thisCpy.setProperties({
             active: false,
-            type: 'toggle'
+            type: 'toggle',
+            alive: options.alive || false
         });
         thisCpy.on('change:active', function () {
             if (this.get('active')) {

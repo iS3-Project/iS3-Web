@@ -9,6 +9,10 @@
  * Created by linxiaodong on 2016/12/27.
  */
 
+Mousetrap.bind('f2', function () {
+    $('.ol-dragpan :button').click();
+});
+
 Mousetrap.bind('ctrl+q', function () {
     $('.iS3-gisquality :button').click();
 });

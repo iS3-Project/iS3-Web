@@ -503,59 +503,74 @@ iS3.toolbar.GisQualityControl.autoMarkRepeatedPoints = function (targetLayer, st
         return;
     }
     var layer = layertree.getLayerById(layertree.selectedLayer.id);
-    var features = layer.getSource().getFeatures();
-    var points = [];
+    var allFeatures = layer.getSource().getFeatures();
 
-    // Get concave hull of the features
-    for (var i = 0; i < features.length; i++) {
-        if (features[i].get('status') === 0) {
-            points.push(features[i].getGeometry().getCoordinates());
+    var parts = {};
+    for (var i = 0; i < allFeatures.length; i++) {
+        var code = iS3.geohash.encode(allFeatures[i].get('xxx'), allFeatures[i].get('yyy'), 7);
+        if (!parts[code]) {
+            parts[code] = [];
         }
+        parts[code].push(allFeatures[i]);
     }
-    var concavePoints = hull(points, 10);
-    var concaveGeom = new ol.geom.Polygon([concavePoints], 'XY');
 
-    concaveGeom = iS3.topology.parser.write(iS3.topology.parser.read(concaveGeom).buffer(10));
+    $.each(parts, function (key, features) {
+        var points = [];
 
-    iS3.geoRequest.polygonFeaturesFromTile(targetLayer, concaveGeom).done(function (queryFeatures) {
-        if (queryFeatures.length < 1) {
-            document.getElementById('auto-repeated-mark').disabled = false;
-            return;
-        }
-
-        var grids = {};
-        for (var i = 0; i < queryFeatures.length; i++) {
-            var code = iS3.geohash.encode(queryFeatures[i].get('xxx'), queryFeatures[i].get('yyy'), 9);
-            if (!grids[code]) {
-                grids[code] = [];
-            }
-            grids[code].push(queryFeatures[i]);
-        }
-        var repeatedFeatures = [];
+        // Get concave hull of the features
         for (i = 0; i < features.length; i++) {
-            var featureHash = iS3.geohash.encode(features[i].get('xxx'), features[i].get('yyy'), 9);
-            var neighbors = iS3.geohash.neighbors(featureHash);
-            neighbors.unshift(featureHash);
-            var bufferfeature = iS3.topology.parser.read(features[i].getGeometry()).buffer(buffer);
-            var intersect = false;
-            for (var j = 0; j < neighbors.length; j++) {
-                if (grids[neighbors[j]]) {
-                    for (var k = 0; k < grids[neighbors[j]].length; k++) {
-                        if (bufferfeature.intersects(iS3.topology.parser.read(grids[neighbors[j]][k].getGeometry()))) {
-                            intersect = true;
-                            break;
+            if (features[i].get('status') === 0) {
+                points.push(features[i].getGeometry().getCoordinates());
+            }
+        }
+        var concavePoints = hull(points, 10);
+        var concaveGeom = new ol.geom.Polygon([concavePoints], 'XY');
+
+        concaveGeom = iS3.topology.parser.write(iS3.topology.parser.read(concaveGeom).buffer(10));
+
+        iS3.geoRequest.polygonFeaturesFromTile(targetLayer, concaveGeom).done(function (queryFeatures) {
+            if (queryFeatures.length < 1) {
+                document.getElementById('auto-repeated-mark').disabled = false;
+                return;
+            }
+
+            var grids = {};
+            for (var i = 0; i < queryFeatures.length; i++) {
+                var code = iS3.geohash.encode(queryFeatures[i].get('xxx'), queryFeatures[i].get('yyy'), 9);
+                if (!grids[code]) {
+                    grids[code] = [];
+                }
+                grids[code].push(queryFeatures[i]);
+            }
+
+            var repeatedFeatures = [];
+            for (i = 0; i < features.length; i++) {
+                var featureHash = iS3.geohash.encode(features[i].get('xxx'), features[i].get('yyy'), 9);
+                var neighbors = iS3.geohash.neighbors(featureHash);
+                neighbors.unshift(featureHash);
+                var bufferfeature = iS3.topology.parser.read(features[i].getGeometry()).buffer(buffer);
+                var intersect = false;
+                for (var j = 0; j < neighbors.length; j++) {
+                    if (grids[neighbors[j]]) {
+                        for (var k = 0; k < grids[neighbors[j]].length; k++) {
+                            if (bufferfeature.intersects(
+                                    iS3.topology.parser.read(grids[neighbors[j]][k].getGeometry()))) {
+                                intersect = true;
+                                break;
+                            }
                         }
+                    }
+                    if (intersect) {
+                        break;
                     }
                 }
                 if (intersect) {
-                    break;
+                    repeatedFeatures.push(features[i]);
                 }
             }
-            if (intersect) {
-                repeatedFeatures.push(features[i]);
-            }
-        }
-        iS3.toolbar.GisQualityControl.markFeatures(repeatedFeatures, status, color, true);
-        document.getElementById('auto-repeated-mark').disabled = false;
+            iS3.toolbar.GisQualityControl.markFeatures(repeatedFeatures, status, color, true);
+
+            document.getElementById('auto-repeated-mark').disabled = false;
+        });
     });
 };

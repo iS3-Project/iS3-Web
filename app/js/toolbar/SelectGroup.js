@@ -97,8 +97,12 @@ iS3.toolbar.SelectGroup.prototype.loadBoxSelect = function () {
             var source = layertree.getLayerById(layertree.selectedLayer.id).getSource();
             if (source instanceof ol.source.Vector) {
                 source.forEachFeatureIntersectingExtent(extent, function (feature) {
-                    thisCpy.selectInteraction.getFeatures().push(feature);
+                    if (feature.get('selectable') === undefined || feature.get('selectable')) {
+                        thisCpy.selectInteraction.getFeatures().push(feature);
+                    }
                 });
+                layertree.getLayerById(layertree.selectedLayer.id).changed();
+                layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + " selected";
             } else if (source instanceof ol.source.Tile) {
                 var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
                 iS3.geoRequest.bboxFeaturesFromTile(layerDef, extent,
@@ -109,6 +113,7 @@ iS3.toolbar.SelectGroup.prototype.loadBoxSelect = function () {
                                 thisCpy.selectInteraction.getFeatures().push(features[i]);
                             }
                         }
+                        layertree.message.textContent = features.length + " selected";
                     });
             }
         }
@@ -146,18 +151,22 @@ iS3.toolbar.SelectGroup.prototype.loadPolygonSelect = function () {
         var geomDraw = evt.feature.getGeometry();
         var selectedSource = layertree.getLayerById(layertree.selectedLayer.id).getSource();
         if (selectedSource instanceof ol.source.Vector) {
-            selectedSource.forEachFeatureInExtent(extent, function (f) {
-                if (iS3.topology.polyIntersectsPoly(geomDraw, f.getGeometry()) === true) {
-                    thisCpy.selectInteraction.getFeatures().push(f);
+            selectedSource.forEachFeatureInExtent(extent, function (feature) {
+                if (iS3.topology.polyIntersectsPoly(geomDraw, feature.getGeometry()) === true) {
+                    if (feature.get('selectable') === undefined || feature.get('selectable')) {
+                        thisCpy.selectInteraction.getFeatures().push(feature);
+                    }
                 }
             });
+            layertree.getLayerById(layertree.selectedLayer.id).changed();
+            layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + " selected";
         } else if (selectedSource instanceof ol.source.Tile) {
             var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
-
             iS3.geoRequest.polygonFeaturesFromTile(layerDef, geomDraw).done(function (features) {
                 for (var i = 0; i < features.length; i++) {
                     thisCpy.selectInteraction.getFeatures().push(features[i]);
                 }
+                layertree.message.textContent = features.length + " selected";
             });
         }
     }, this);

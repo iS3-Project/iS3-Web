@@ -22,11 +22,14 @@
  * @constructor
  */
 iS3.toolbar.GisQualityControl = function (toolbar) {
+    this.NOMARK = -1;
     this.QUALIFIED = 0;
     this.PICTURE = 1;
     this.ISOLATED = 2;
     this.REPEATED = 3;
     this.LINK = 4;
+    this.WORKTMPFIELD = 'worktmp';
+    this.TIPREPEATED = 'tip_repeated';
     var thisCpy = this;
 
     var draggableDiv;
@@ -43,6 +46,12 @@ iS3.toolbar.GisQualityControl = function (toolbar) {
             }
             else {
                 draggableDiv.show();
+                // remove star to indicate an old delete count result
+                var gisForm = document.getElementById('gisQualityForm');
+                var gisTable = gisForm.getElementsByTagName('table')[0];
+                var gisTr = gisTable.getElementsByTagName('tr')[0];
+                var gisTd = gisTr.getElementsByTagName('td')[0];
+                gisTd.textContent = gisTd.textContent.replace(/\*/g, '');
 
                 // initial source layer and target layer
                 var childrent = toolbar.layertree.layerContainer.childNodes;
@@ -104,18 +113,25 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     firstRow.appendChild(row11);
 
     var row12 = document.createElement('td');
+    var switchPictureStyle = document.createElement('input');
+    switchPictureStyle.id = 'gischeck-checkbox-picture';
+    switchPictureStyle.type = 'checkbox';
+    switchPictureStyle.checked = true;
+    switchPictureStyle.onchange = function () {
+        var isChecked = document.getElementById('gischeck-checkbox-picture').checked;
+        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.PICTURE, markedColor, isChecked);
+    };
+    row12.appendChild(switchPictureStyle);
     var pictureAuto = document.createElement('input');
     pictureAuto.type = 'button';
     pictureAuto.value = lang.auto;
     pictureAuto.onclick = function () {
         iS3.toolbar.GisQualityControl.autoMarkPicturedPoints(thisCpy.PICTURE, markedColor)
             .done(function (count) {
-                row11.textContent = lang.pictureDeletedPoints + '(' + count + ')';
+                row11.textContent = lang.pictureDeletedPoints + '*(' + count + ')'; // star to indicate new count
             });
     };
     row12.appendChild(pictureAuto);
-    firstRow.appendChild(row12);
-
     var fileInput = document.createElement('input');
     fileInput.name = 'file';
     fileInput.type = 'file';
@@ -130,7 +146,17 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     var row21 = document.createElement('td');
     row21.textContent = lang.isolatedDeletedPoints;
     secondRow.appendChild(row21);
+
     var row22 = document.createElement('td');
+    var switchIsolateStyle = document.createElement('input');
+    switchIsolateStyle.id = 'gischeck-checkbox-isolated';
+    switchIsolateStyle.type = 'checkbox';
+    switchIsolateStyle.checked = true;
+    switchIsolateStyle.onchange = function () {
+        var isChecked = document.getElementById('gischeck-checkbox-isolated').checked;
+        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.ISOLATED, markedColor, isChecked);
+    };
+    row22.appendChild(switchIsolateStyle);
     var isolatedAuto = document.createElement('input');
     isolatedAuto.type = 'button';
     isolatedAuto.value = lang.auto;
@@ -160,7 +186,17 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     var rowi31 = document.createElement('td');
     rowi31.textContent = lang.repeatedDeletedPoints;
     insertRow1.appendChild(rowi31);
+
     var rowi32 = document.createElement('td');
+    var switchRepeatStyle = document.createElement('input');
+    switchRepeatStyle.id = 'gischeck-checkbox-repeated';
+    switchRepeatStyle.type = 'checkbox';
+    switchRepeatStyle.checked = true;
+    switchRepeatStyle.onchange = function () {
+        var isChecked = document.getElementById('gischeck-checkbox-repeated').checked;
+        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.REPEATED, markedColor, isChecked);
+    };
+    rowi32.appendChild(switchRepeatStyle);
     var reptAuto = document.createElement('input');
     reptAuto.id = 'auto-repeated-mark';
     reptAuto.type = 'button';
@@ -191,7 +227,17 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     var row31 = document.createElement('td');
     row31.textContent = lang.linkDeletedPoints;
     thirdRow.appendChild(row31);
+
     var row32 = document.createElement('td');
+    var switchLinkStyle = document.createElement('input');
+    switchLinkStyle.id = 'gischeck-checkbox-link';
+    switchLinkStyle.type = 'checkbox';
+    switchLinkStyle.checked = true;
+    switchLinkStyle.onchange = function () {
+        var isChecked = document.getElementById('gischeck-checkbox-link').checked;
+        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.LINK, markedColor, isChecked);
+    };
+    row32.appendChild(switchLinkStyle);
     var linkBtn = document.createElement('input');
     linkBtn.id = 'gischeck-mark-link';
     linkBtn.type = 'button';
@@ -209,7 +255,17 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     var rowi41 = document.createElement('td');
     rowi41.textContent = lang.reset;
     insertRow2.appendChild(rowi41);
+
     var rowi42 = document.createElement('td');
+    var switchTipStyle = document.createElement('input');
+    switchTipStyle.id = 'gischeck-checkbox-tip';
+    switchTipStyle.type = 'checkbox';
+    switchTipStyle.checked = true;
+    switchTipStyle.onchange = function () {
+        var isChecked = document.getElementById('gischeck-checkbox-tip').checked;
+        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.NOMARK, tipColor, isChecked, 'tip_repeated')
+    };
+    rowi42.appendChild(switchTipStyle);
     var resetBtn = document.createElement('input');
     resetBtn.id = 'gischeck-mark-reset';
     resetBtn.type = 'button';
@@ -280,6 +336,7 @@ iS3.toolbar.GisQualityControl.resetFeatures = function (features) {
 
     features.forEach(function (feature) {
         feature.set('status', 0);
+        feature.unset('worktmp');
         feature.setStyle(selectableStyle());
     });
     toolbar.selectInteraction.getFeatures().clear();
@@ -330,10 +387,107 @@ iS3.toolbar.GisQualityControl.markFeatures = function (features, status, color, 
     features.forEach(function (feature) {
         if (!nomark) {
             feature.set('status', status);
+            feature.unset('worktmp');
         }
         feature.setStyle(selectableStyle());
     });
     toolbar.selectInteraction.getFeatures().clear();
+};
+
+/**
+ * switch feature style
+ *
+ * @param {string} status Status -1 for nomark point
+ * @param {color} color Color
+ * @param {bool} ischecked If the checkbox is checked
+ * @param {string} tipInfo the worktmp fields info
+ * @returns {boolean} Success
+ */
+iS3.toolbar.GisQualityControl.switchFeatureStyle = function (status, color, ischecked, tipInfo) {
+    // valid layer
+    var layertree = iS3Project.getLayertree();
+    if (layertree.getLayerDefById(layertree.selectedLayer.id).layertype !== iS3.LayerDef.layerType.PANOTIMEB) {
+        document.getElementById('auto-repeated-mark').disabled = false;
+        return false;
+    }
+    // valid checkbox info
+    if (ischecked === 'undefined') {
+        return false;
+    }
+
+    // set default tipinfo because 'worktmp' may be undefined
+    // tipInfo = typeof tipInfo !== 'undefined' ? tipInfo : '';
+
+    var toolbar = iS3Project.getToolbar();
+    var fill = iS3.style.getFill(color);
+    var stroke = iS3.style.getStroke(iS3.style.setTransparent(color, 0.4), 8);
+    var image = null;
+    switch (status) {
+        case -1:
+            break;
+        case 1:
+            image = iS3.style.getTriangle(fill, stroke, 8);
+            break;
+        case 2:
+            image = iS3.style.getSquare(fill, stroke, 5);
+            break;
+        case 3:
+            image = iS3.style.getStar(fill, stroke, 5);
+            break;
+        case 4:
+            image = iS3.style.getHexagon(fill, stroke, 5);
+            break;
+        default:
+            return false;
+    }
+    if (tipInfo === 'tip_repeated') {
+        image = iS3.style.getCircle(fill, stroke, 5);
+    }
+    var style = new ol.style.Style({image: image});
+    function selectableStyle() {
+        return function () {
+            return toolbar.selectInteraction.getFeatures().getArray().indexOf(this) === -1
+                ? style : iS3.style.getDefaultSelected();
+        };
+    }
+
+    function transparentStyle() {
+        return function () {
+            return this.get('worktmp') && this.get('worktmp') === tipInfo
+                ? iS3.style.getDefault() : iS3.style.getTransparent();
+        };
+    }
+
+    function assertTargetPoint(point, status, tipInfo) {
+        if (point.get('worktmp')) {
+            return point.get('worktmp') === tipInfo;
+        } else {
+            return point.get('status') === status;
+        }
+    }
+
+    // get target points
+    var layer = layertree.getLayerById(layertree.selectedLayer.id);
+    var features = layer.getSource().getFeatures();
+    var points = [];
+    for (var i = 0; i < features.length; i++) {
+        if (assertTargetPoint(features[i], status, tipInfo)) {
+            points.push(features[i]);
+        }
+    }
+    // clear selections
+    toolbar.selectInteraction.getFeatures().clear();
+    // change points' style
+    points.forEach(function (point) {
+        if (ischecked) {
+            point.setStyle(selectableStyle());
+            point.set('selectable', true);
+        } else {
+            point.setStyle(transparentStyle());
+            point.set('selectable', false);
+        }
+    });
+    layertree.message.textContent = points.length + " switched";
 };
 
 /**
@@ -452,7 +606,7 @@ iS3.toolbar.GisQualityControl.autoMarkIsolatedPoints = function (status, color) 
     if (layertree.getLayerDefById(layertree.selectedLayer.id).layertype !== iS3.LayerDef.layerType.PANOTIMEB) {
         return;
     }
-    var minarea = 3.14 * buffer * buffer / 4.0 * 2.0;
+    var minarea = 3.14 * buffer * buffer * 2.0;
     var features = layertree.getLayerById(layertree.selectedLayer.id).getSource().getFeatures();
     var jstsgeom = [];
     var isolatedgeom = [];
@@ -545,6 +699,7 @@ iS3.toolbar.GisQualityControl.autoMarkRepeatedPoints = function (targetLayer, st
 
             var repeatedFeatures = [];
             for (i = 0; i < features.length; i++) {
+                features[i].unset('worktmp');
                 var featureHash = iS3.geohash.encode(features[i].get('xxx'), features[i].get('yyy'), 9);
                 var neighbors = iS3.geohash.neighbors(featureHash);
                 neighbors.unshift(featureHash);
@@ -565,11 +720,11 @@ iS3.toolbar.GisQualityControl.autoMarkRepeatedPoints = function (targetLayer, st
                     }
                 }
                 if (intersect) {
+                    features[i].set('worktmp', 'tip_repeated');
                     repeatedFeatures.push(features[i]);
                 }
             }
             iS3.toolbar.GisQualityControl.markFeatures(repeatedFeatures, status, color, true);
-
             document.getElementById('auto-repeated-mark').disabled = false;
         });
     });

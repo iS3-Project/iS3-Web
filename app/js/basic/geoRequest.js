@@ -61,7 +61,6 @@ iS3.geoRequest.bboxFeaturesFromTile = function (layerDef, extent, callback) {
         + '&outputFormat=application/json&srsname=' + mapProj.getCode()
         + '&bbox=' + extent.join(',') + ',' + mapProj.getCode();
 
-    console.log(new Date() + ': Send request');
     var parser = new ol.format.GeoJSON();
     var request = new XMLHttpRequest();
     request.open('GET', url);
@@ -69,14 +68,10 @@ iS3.geoRequest.bboxFeaturesFromTile = function (layerDef, extent, callback) {
 
     request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200) {
-            console.log(new Date() + ': Request come back');
             var features = parser.readFeatures(request.responseText, {
                 featureProjection: mapProj
             });
-            if (features.length > 0) {
-                console.log(new Date() + ': Transfer to feature');
-                callback(features);
-            }
+            callback(features);
         }
     };
 };

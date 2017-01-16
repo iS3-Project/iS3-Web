@@ -28,7 +28,12 @@ iS3.style.hexToRgb = function (hex) {
     } : null;
 };
 
+var defaultStyle;
+
 iS3.style.getDefault = function () {
+    if (defaultStyle) {
+        return defaultStyle;
+    }
     var fill = new ol.style.Fill({
         color: 'rgba(255,255,255,0.4)'
     });
@@ -43,7 +48,7 @@ iS3.style.getDefault = function () {
         color: 'rgba(0,0,0,1.0)',
         width: 0.1
     });
-    return new ol.style.Style({
+    return defaultStyle = new ol.style.Style({
         image: new ol.style.Circle({
             fill: fill2,
             stroke: stroke2,
@@ -54,7 +59,12 @@ iS3.style.getDefault = function () {
     });
 };
 
+var defaultSelectedStyle;
+
 iS3.style.getDefaultSelected = function () {
+    if (defaultSelectedStyle) {
+        return defaultSelectedStyle;
+    }
     var fill = new ol.style.Fill({
         color: 'rgba(255,255,255,0.4)'
     });
@@ -70,8 +80,7 @@ iS3.style.getDefaultSelected = function () {
         color: 'rgba(255,255,255,0.4)',
         width: 0.1
     });
-
-    return new ol.style.Style({
+    return defaultSelectedStyle = new ol.style.Style({
         image: new ol.style.Circle({
             fill: fill2,
             stroke: stroke2,
@@ -80,6 +89,15 @@ iS3.style.getDefaultSelected = function () {
         fill: fill,
         stroke: stroke
     });
+};
+
+var transparentStyle;
+
+iS3.style.getTransparent = function () {
+    if (transparentStyle) {
+        return transparentStyle;
+    }
+    return transparentStyle = new ol.style.Style();
 };
 
 iS3.style.getHighlight = function (color) {

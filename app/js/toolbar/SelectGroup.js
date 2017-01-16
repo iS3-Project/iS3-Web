@@ -102,7 +102,7 @@ iS3.toolbar.SelectGroup.prototype.loadBoxSelect = function () {
                     }
                 });
                 layertree.getLayerById(layertree.selectedLayer.id).changed();
-                layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + " selected";
+                layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + ' selected';
             } else if (source instanceof ol.source.Tile) {
                 var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
                 iS3.geoRequest.bboxFeaturesFromTile(layerDef, extent,
@@ -113,7 +113,7 @@ iS3.toolbar.SelectGroup.prototype.loadBoxSelect = function () {
                                 thisCpy.selectInteraction.getFeatures().push(features[i]);
                             }
                         }
-                        layertree.message.textContent = features.length + " selected";
+                        layertree.message.textContent = features.length + ' selected';
                     });
             }
         }
@@ -159,14 +159,14 @@ iS3.toolbar.SelectGroup.prototype.loadPolygonSelect = function () {
                 }
             });
             layertree.getLayerById(layertree.selectedLayer.id).changed();
-            layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + " selected";
+            layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + ' selected';
         } else if (selectedSource instanceof ol.source.Tile) {
             var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
             iS3.geoRequest.polygonFeaturesFromTile(layerDef, geomDraw).done(function (features) {
                 for (var i = 0; i < features.length; i++) {
                     thisCpy.selectInteraction.getFeatures().push(features[i]);
                 }
-                layertree.message.textContent = features.length + " selected";
+                layertree.message.textContent = features.length + ' selected';
             });
         }
     }, this);

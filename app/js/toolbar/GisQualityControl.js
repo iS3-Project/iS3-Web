@@ -263,7 +263,7 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     switchTipStyle.checked = true;
     switchTipStyle.onchange = function () {
         var isChecked = document.getElementById('gischeck-checkbox-tip').checked;
-        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.NOMARK, tipColor, isChecked, 'tip_repeated')
+        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.NOMARK, tipColor, isChecked, 'tip_repeated');
     };
     rowi42.appendChild(switchTipStyle);
     var resetBtn = document.createElement('input');
@@ -401,7 +401,7 @@ iS3.toolbar.GisQualityControl.markFeatures = function (features, status, color, 
  * @param {color} color Color
  * @param {bool} ischecked If the checkbox is checked
  * @param {string} tipInfo the worktmp fields info
- * @returns {boolean} Success
+ * @return {boolean} Success
  */
 iS3.toolbar.GisQualityControl.switchFeatureStyle = function (status, color, ischecked, tipInfo) {
     // valid layer
@@ -487,7 +487,7 @@ iS3.toolbar.GisQualityControl.switchFeatureStyle = function (status, color, isch
             point.set('selectable', false);
         }
     });
-    layertree.message.textContent = points.length + " switched";
+    layertree.message.textContent = points.length + ' switched';
 };
 
 /**

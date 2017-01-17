@@ -6,30 +6,91 @@
     <meta name="author" content="Xiaodong Lin">
     <link href="external/ol3-3.19.1/ol.min.css" rel="stylesheet">
     <link href="css/webgis.min.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="external/goldenlayout-1.5.1/goldenlayout-base.min.css">
+    <link type="text/css" rel="stylesheet" href="external/goldenlayout-1.5.1/goldenlayout-light-theme.min.css">
     <script type="text/javascript" src="external/ol3-3.19.1/ol.min.js"></script>
     <script type="text/javascript" src="external/jquery-3.1.1/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="external/jsts-0.17.0/javascript.util.min.js"></script>
     <script type="text/javascript" src="external/jsts-0.17.0/jsts.min.js"></script>
+    <script type="text/javascript" src="external/goldenlayout-1.5.1/goldenlayout.min.js"></script>
     <script type="text/javascript" src="js/webgis.min.js"></script>
 </head>
 <body>
-<div class="map-container">
-    <div id="toolbar" class="toolbar"></div>
-    <div id="layertree" class="layertree"></div>
-    <div id="map" class="map"></div>
-    <div class="notification-bar">
-        <div id="messageBar" class="message-bar"></div>
-        <div id="projection"></div>
-        <div id="coordinates"></div>
-    </div>
+<div id="map-container">
+    <div id="topContainer"></div>
+    <div id="centerContainer"></div>
+    <div id="bottomContainer"></div>
 </div>
 <script>
 
 /* globals iS3 */
 /* globals ol */
+/* globals GoldenLayout */
 
 document.addEventListener('DOMContentLoaded', init);
 function init() {
+
+    // Top layout
+    var configTop = {
+        settings: {hasHeaders: false},
+        content: [{
+            type: 'row',
+            content: [{
+                type: 'component',
+                componentName: 'topComponent'
+            }]
+        }]
+    };
+    var myLayoutTop = new GoldenLayout(configTop, $('#topContainer'));
+    myLayoutTop.registerComponent('topComponent', function (container, componentState) {
+        container.getElement().html('<div id="toolbar" class="toolbar"></div>');
+    });
+    myLayoutTop.init();
+
+    // Center layout
+    var configCenter = {
+        content: [{
+            type: 'row',
+            content: [{
+                type: 'component',
+                componentName: 'layertree',
+                width: 20
+            }, {
+                type: 'component',
+                componentName: 'map'
+            }]
+        }]
+    };
+    var myLayoutCenter = new GoldenLayout(configCenter, $('#centerContainer'));
+    myLayoutCenter.registerComponent('layertree', function (container, componentState) {
+        container.getElement().html('<div id="layertree" class="layertree"></div>');
+    });
+    myLayoutCenter.registerComponent('map', function (container, componentState) {
+        container.getElement().html('<div id="map" class="map"></div>');
+    });
+    myLayoutCenter.init();
+
+    // Bottom layout
+    var configBottom = {
+        settings: {hasHeaders: false},
+        content: [{
+            type: 'row',
+            content: [{
+                type: 'component',
+                componentName: 'bottomComponent'
+            }]
+        }]
+    };
+    var myLayoutBottom = new GoldenLayout(configBottom, $('#bottomContainer'));
+    myLayoutBottom.registerComponent('bottomComponent', function (container, componentState) {
+        container.getElement().html('<div class="notification-bar">'
+            + '<div id="messageBar" class="message-bar"></div>'
+            + '<div id="projection"></div>'
+            + '<div id="coordinates"></div>'
+            + '</div>');
+    });
+    myLayoutBottom.init();
+
     document.removeEventListener('DOMContentLoaded', init);
 
     $.getJSON('./config.json', function (json) {

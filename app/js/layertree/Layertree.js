@@ -35,6 +35,7 @@ iS3.layertree.Layertree = function (options) {
         }
         var div = document.getElementById(options.target);
         if (div === null || div.nodeType !== 1) {
+            console.log(div);
             throw new Error('Please provide a valid element id.');
         }
         if (!options.parentObj.getMessage()) {

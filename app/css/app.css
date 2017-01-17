@@ -1,15 +1,32 @@
-body {
+body,
+html {
     margin: 0;
+    height: 100%;
 }
-.map-container {
+#map-container {
     width: 100%;
-    height: 100%; /*Fallback*/
-    height: 100vh;
+    height: 100%;
+    position: relative;
 }
 .map {
-    max-width: 80%;
-    height: calc(100% - 3.5em);
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    position: relative;
+}
+#topContainer {
+    width: 100%;
+    height: 2.0em;
+    position: relative;
+}
+#centerContainer {
+    width: 100%;
+    height: calc(100% - 3.5em);
+    position: relative;
+}
+#bottomContainer {
+    width: 100%;
+    height: 1.5em;
     position: relative;
 }
 .notification-bar {

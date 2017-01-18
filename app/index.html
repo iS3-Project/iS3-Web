@@ -49,6 +49,11 @@ function init() {
 
     // Center layout
     var configCenter = {
+        settings: {
+            showPopoutIcon: false,
+            showMaximiseIcon: true,
+            showCloseIcon: false
+        },
         content: [{
             type: 'row',
             content: [{
@@ -204,6 +209,22 @@ function init() {
         if (iS3Project.getConfig().projectDef) {
             iS3Project.getConfig().projectDef.init();
         }
+
+        // resize events
+        $(window).resize(function () {
+            setTimeout(function () {
+                myLayoutTop.updateSize();
+                myLayoutCenter.updateSize();
+                myLayoutBottom.updateSize();
+                map && map.updateSize();
+            }, 200);
+        });
+
+        var resizeMap = document.getElementById('map');
+        var resizecallback = function () {
+            $(window).trigger('resize');
+        };
+        window.addResizeListener(resizeMap, resizecallback);
     });
 }
 </script>

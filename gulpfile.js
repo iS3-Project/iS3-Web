@@ -13,6 +13,7 @@ var connect = require('gulp-connect');
 var jsOrder = [
     'app/js/core/iS3.js',
     'app/js/basic/mousetrap.min.js',
+    'app/js/basic/detectelementresize.min.js',
     'app/js/basic/*.js',
     'app/js/core/projectDef/ProjectDef.js',
     'app/js/core/projectDef/*.js',

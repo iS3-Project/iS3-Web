@@ -690,7 +690,7 @@ iS3.toolbar.GisQualityControl.autoMarkRepeatedPoints = function (targetLayer, st
 
             var grids = {};
             for (var i = 0; i < queryFeatures.length; i++) {
-                if (queryFeatures.get('status') !== 0) {
+                if (queryFeatures[i].get('status') !== 0) {
                     continue;
                 }
                 var code = iS3.geohash.encode(queryFeatures[i].get('xxx'), queryFeatures[i].get('yyy'), 9);

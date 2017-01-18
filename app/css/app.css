@@ -59,3 +59,6 @@ html {
     border: none;
     outline: 0;
 }
+body .lm_content {
+    border: 0;
+}

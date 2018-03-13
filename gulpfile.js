@@ -11,9 +11,8 @@ var jshint = require('gulp-jshint');
 var connect = require('gulp-connect');
 
 var jsOrder = [
+    'app/libs/**/*.js',
     'app/js/core/iS3.js',
-    'app/js/basic/mousetrap.min.js',
-    'app/js/basic/detectelementresize.min.js',
     'app/js/basic/*.js',
     'app/js/core/projectDef/ProjectDef.js',
     'app/js/core/projectDef/*.js',
@@ -28,7 +27,13 @@ var jsOrder = [
     'app/js/format/*.js',
     'app/js/**/*.js'
 ];
-
+var cssOrder = [
+    'app/libs/goldenlayout-1.5.1/goldenlayout-base.min.css',
+    'app/libs/goldenlayout-1.5.1/goldenlayout-light-theme.css',
+    // 'app/libs/goldenlayout-1.5.1/goldenlayout-light-theme.min copy.css',
+    'app/libs/SemanticUI-2.2/semantic.min.css',
+    'app/css/**/*.css'
+];
 gulp.task('jshint', function () {
     return gulp.src('app/js/**/*.js')
         .pipe(jshint())
@@ -36,7 +41,7 @@ gulp.task('jshint', function () {
 });
 
 gulp.task('concatcss', function () {
-    return gulp.src('app/css/**/*.css')
+    return gulp.src(cssOrder)
         .pipe(concat('webgis-debug.css'))
         .pipe(gulp.dest('build/css'));
 });
@@ -48,7 +53,7 @@ gulp.task('concatjs', function () {
 });
 
 gulp.task('minifycss', function () {
-    return gulp.src('app/css/**/*.css')
+    return gulp.src(cssOrder)
         .pipe(concat('webgis.min.css'))
         .pipe(minifycss())
         .pipe(gulp.dest('build/css'));
@@ -93,10 +98,10 @@ gulp.task('copyall', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch('app/js/**/*.js', function () {
+    gulp.watch('app/**/*.js', function () {
         gulp.run('concatjs');
     });
-    gulp.watch('app/css/**/*.css', function () {
+    gulp.watch('app/**/*.css', function () {
         gulp.run('concatcss');
     });
     gulp.watch('app/*.*', function () {

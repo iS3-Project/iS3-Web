@@ -62,3 +62,24 @@ iS3.domTool.createOption = function (optionContent, optionValue) {
 iS3.domTool.isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
+
+/**
+ * Active tab in Goldenlayout when the tab is in 'stack' content item
+ *
+ * @param {GoldenLayout} layout Layout
+ * @param {String} componentName Name
+ */
+iS3.domTool.activeTabByComponentName = function (layout, componentName) {
+    var allContentItems = layout.root.contentItems;
+    for (var i in allContentItems) {
+        var stacks = allContentItems[i].getItemsByType('stack');
+        for (var j in stacks) {
+            var tabs = stacks[j].header.tabs;
+            for (var k in tabs) {
+                if (tabs[k].contentItem.componentName === componentName) {
+                    stacks[j].header.setActiveContentItem(tabs[k].contentItem);
+                }
+            }
+        }
+    }
+};

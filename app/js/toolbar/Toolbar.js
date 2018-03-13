@@ -113,7 +113,7 @@ iS3.toolbar.Toolbar.prototype.addGroup = function (name) {
             }));
             break;
         case 'testGroup':
-            this.addToolGroup(new iS3.toolbar.TestGroup({parentObj: this, id: 'testGroup', name: 'test'}));
+            this.addToolGroup(new iS3.toolbar.TestGroup({parentObj: this, id: 'testGroup', name: 'Test'}));
             break;
         default:
             return false;
@@ -171,10 +171,15 @@ iS3.toolbar.Toolbar.prototype.addToolGroup = function (group) {
         return this;
     }
     this.groups.add(group);
-    var nameSpan = document.createElement('span');
-    nameSpan.className = 'group-name';
-    nameSpan.textContent = group.name + ':';
-    this.containerDiv.appendChild(nameSpan);
+
+    var groupName = document.createElement('span');
+    groupName.className = 'group-name';
+    groupName.textContent = group.name + '  ';
+
+    // var groupName = document.createElement('div');
+    // groupName.className = 'ui right pointing grey basic mini label group-name';
+    // groupName.textContent = group.name;
+    this.containerDiv.appendChild(groupName);
     for (var i = 0; i < group.getTools().length; i++) {
         this.addControl(group.getTools()[i]);
     }

@@ -1,5 +1,5 @@
 {
-	"server" : "http://172.18.2.177:9090/geoserver",
+	"server" : "https://demo.geo-solutions.it/geoserver",
 	"proxy" : "http://localhost",
-	"lang" : "CN"
+	"lang" : "EN"
 }

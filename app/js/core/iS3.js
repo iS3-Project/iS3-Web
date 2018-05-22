@@ -3,10 +3,6 @@
  * @author Lin Xiaodong<linxdcn@gmail.com>
  */
 
-/* globals ol */
-
-var iS3Project = window.iS3Project;
-
 /**
  * Construction function
  *
@@ -17,153 +13,126 @@ function iS3(options) {
 
 }
 
-/**
- * Construction function
- *
- * @param {Array} options Options
- * @constructor
- */
-iS3.Project = function (options) {
+iS3.Main = function (options) {
+    this.config = options.config || null;
 
-    /**
-     * @type {ol.Map}
-     * @private
-     */
-    this._map = options.map || null;
-
-    /**
-     * @type {iS3.layertree}
-     * @private
-     */
-    this._layertree = options.layertree || null;
-
-    /**
-     * @type {iS3.toolbar}
-     * @private
-     */
-    this._toolbar = options.toolbar || null;
-
-    /**
-     * @type {document.element}
-     * @private
-     */
-    this._message = options.message || null;
-
-    /**
-     * All the layer information. key format:'server:store:name', value: {iS3.layertree.layerDef}
-     * @type {Array}
-     * @private
-     */
-    this._layerDefs = {};
-
-    /**
-     * @type {iS3.config}
-     * @private
-     */
-    var config = options.config || null;
-    this._config = new iS3.Config({config: config});
-
-    iS3Project = this;
+    this.init();
 };
 
-/**
- * Get map
- *
- * @return {ol.Map} Return map
- */
-iS3.Project.prototype.getMap = function () {
-    return this._map;
+iS3.Main.prototype.init = function () {
+
+    var main = this;
+    // initial project, global variable
+    var iS3Project = new iS3.Project({config: main.config});
+
+    // initial projection options
+    //        var projControl = new iS3.toolbar.Projection({
+    //            target: 'projection'
+    //        });
+
+    // initial map
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                preload: Infinity,
+                source: new ol.source.OSM({
+                    wrapX: false
+                }),
+                visible: true,
+                id: 'Local:Local:OpenStreet Map',
+                layertype: iS3.LayerDef.layerType.BASE_MAP
+            }),
+            new ol.layer.Tile({
+                preload: Infinity,
+                source: new ol.source.BingMaps({
+                    key: 'AuZqkxV8gt-r1OwAN_2QnolUWIc5wcL-m3ncZJMD-h9LdGcIBHO7FXnThf1Ct-8z',
+                    imagerySet: 'Aerial',
+                    wrapX: false
+                }),
+                visible: false,
+                id: 'Local:Local:Bing Map',
+                layertype: iS3.LayerDef.layerType.BASE_MAP
+            }),
+            new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    wrapX: false
+                }),
+                id: 'Local:Local:Drawing Layer'
+            })
+        ],
+        interactions: ol.interaction.defaults({
+            dragPan: false
+        }),
+        controls: [
+            // Define some new controls
+            new ol.control.MousePosition({
+                coordinateFormat: function (coordinates) {
+                    var coordX = coordinates[0].toFixed(3);
+                    var coordY = coordinates[1].toFixed(3);
+                    return coordX + ', ' + coordY;
+                },
+                target: 'coordinates'
+            }),
+//                    projControl
+        ],
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 3
+        }),
+        loadTilesWhileAnimating: true,
+        loadTilesWhileInteracting: true
+    });
+    iS3Project.setMap(map);
+
+    // initial message output
+    var message = document.getElementById('messageBar') || document.createElement('span');
+    var observer = new MutationObserver(function (mutations) {
+        if (mutations[0].target.textContent) {
+            var oldText = mutations[0].target.textContent;
+            var timeoutFunction = function () {
+                if (oldText !== mutations[0].target.textContent) {
+                    oldText = mutations[0].target.textContent;
+                    setTimeout(timeoutFunction, 10000);
+                } else {
+                    oldText = '';
+                    mutations[0].target.textContent = '';
+                }
+            };
+            setTimeout(timeoutFunction, 10000);
+        }
+    });
+    observer.observe(message, {childList: true});
+    iS3Project.setMessage(message);
+
+    // initial layertree
+    var layertree = new iS3.layertree.Layertree({
+        parentObj: iS3Project,
+        target: 'layertree',
+        buttons: ['addwms', 'newlayer', 'addinput', 'outputlayer', 'deletelayer']
+
+    });
+
+    layertree.createRegistry(map.getLayers().item(0));
+    layertree.createRegistry(map.getLayers().item(1));
+    iS3Project.setLayertree(layertree);
+
+    // initial toolbar
+    var toolbar = new iS3.toolbar.Toolbar({
+        parentObj: iS3Project,
+        target: 'toolbar',
+        buttons: ['zoomGroup', 'selectGroup', 'drawGroup', 'measureGroup',
+            'queryGroup']
+    });
+    iS3Project.setToolbar(toolbar);
+
+    $('.ol-dragpan :button').click();
+
+    // initial datatree
+    var datatree = new iS3.datatree.Datatree({
+        parentObj: iS3Project,
+        target: 'datatree'
+    });
+    iS3Project.setDatatree((datatree))
 };
 
-/**
- * Set map
- *
- * @param {ol.Map} map Map
- */
-iS3.Project.prototype.setMap = function (map) {
-    if (map instanceof ol.Map) {
-        this._map = map;
-    } else {
-        throw new Error('map must be an instance of ol.Map');
-    }
-};
-
-/**
- * Get layer tree
- *
- * @return {iS3.layertree} Return layertree
- */
-iS3.Project.prototype.getLayertree = function () {
-    return this._layertree;
-};
-
-/**
- * Set layertree
- *
- * @param {iS3.layertree} layertree Layertree
- */
-iS3.Project.prototype.setLayertree = function (layertree) {
-    if (layertree instanceof iS3.layertree.Layertree) {
-        this._layertree = layertree;
-    } else {
-        throw new Error('layertree must be an instance of iS3.layertree');
-    }
-};
-
-/**
- * Get toolbar
- *
- * @return {iS3.toolbar} Return toolbar
- */
-iS3.Project.prototype.getToolbar = function () {
-    return this._toolbar;
-};
-
-/**
- * Set toolbar
- *
- * @param {iS3.toolbar} toolbar Toolbar
- */
-iS3.Project.prototype.setToolbar = function (toolbar) {
-    if (toolbar instanceof iS3.toolbar.Toolbar) {
-        this._toolbar = toolbar;
-    } else {
-        throw new Error('toolbar must be an instance of iS3.toolbar');
-    }
-};
-
-/**
- * Get message bar
- *
- * @return {document.element} Message bar
- */
-iS3.Project.prototype.getMessage = function () {
-    return this._message;
-};
-
-/**
- * Set message bar
- *
- * @param {document.element} message Message
- */
-iS3.Project.prototype.setMessage = function (message) {
-    this._message = message;
-};
-
-/**
- * Get Layer definitions
- *
- * @return {Array} Layer definitions
- */
-iS3.Project.prototype.getLayerDefs = function () {
-    return this._layerDefs;
-};
-
-/**
- * Get config
- *
- * @return {iS3.Config}
- */
-iS3.Project.prototype.getConfig = function () {
-    return this._config;
-};

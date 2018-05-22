@@ -30,6 +30,5 @@ Enter `localhost:9080` in your browser to view the web application
 
 Update the `/config.json` file to change the configuration of this project.
 
-1. server: The geoserver website. If you do not have one, a remote one can be used: 'http://demo.opengeo.org/geoserver'
-2. proxy: A proxy project can be add. Please refer to [gis-platform](http://icode.baidu.com/repo/baidu%2Fbee%2Fgis-platform/files/master/tree/)
-3. lang: CN or EN
+1. server: The geoserver website. If you do not have one, a remote one can be used: 'https://demo.geo-solutions.it/geoserver'
+2. lang: CN or EN

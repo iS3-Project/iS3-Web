@@ -59,6 +59,7 @@ iS3.LangCN = function () {
     this.queryGroupName = '查询';
     this.customGroupName = '自定义';
     // zoom group
+    this.pan = '移动';
     this.zoomToFullTip = '显示所有图层';
     this.zoomToLayerTip = '缩放到图层';
     this.zoomToSelectedTip = '缩放到选择元素';

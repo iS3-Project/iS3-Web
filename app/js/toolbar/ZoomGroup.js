@@ -54,10 +54,9 @@ iS3.toolbar.ZoomGroup.prototype.init = function () {
 iS3.toolbar.ZoomGroup.prototype.loadDragPan = function () {
     var dragPan = new ol.control.Interaction({
         label: ' ',
-        tipLabel: iS3Project.getConfig().lang.addPointsTip,
+        tipLabel: iS3Project.getConfig().lang.pan,
         className: 'ol-dragpan ol-unselectable ol-control',
         interaction: new ol.interaction.DragPan(),
-        alive: true
     });
     dragPan.id = 'dragPan';
     this.add(dragPan);

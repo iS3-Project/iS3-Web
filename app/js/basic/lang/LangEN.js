@@ -60,6 +60,7 @@ iS3.LangEN = function () {
     this.queryGroupName = 'Query';
     this.customGroupName = 'Custom';
     // zoom group
+    this.pan = 'Pan';
     this.zoomToFullTip = 'Zoom to full extent';
     this.zoomToLayerTip = 'Zoom to layer extent';
     this.zoomToSelectedTip = 'Zoom to selected feature';

@@ -119,7 +119,7 @@ iS3.toolbar.GisQualityControl.prototype.getGISQualityDiv = function (toolbar) {
     switchPictureStyle.checked = true;
     switchPictureStyle.onchange = function () {
         var isChecked = document.getElementById('gischeck-checkbox-picture').checked;
-        iS3.toolbar.GisQualityControl.switchFeatureStyle(thisCpy.PICTURE, markedColor, isChecked);
+        iS3.toolbar.GisQualityContprol.switchFeatureStyle(thisCpy.PICTURE, markedColor, isChecked);
     };
     row12.appendChild(switchPictureStyle);
     var pictureAuto = document.createElement('input');

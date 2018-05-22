@@ -20,6 +20,7 @@ iS3.Config = function (options) {
     }
     this.server = json['server'];
     this.proxy = json['proxy'];
+    this.CODE = json['CODE'];
 
     switch (json['lang']) {
         case 'CN':

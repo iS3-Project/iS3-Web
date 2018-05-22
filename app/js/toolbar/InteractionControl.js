@@ -42,7 +42,7 @@ ol.control.Interaction = function (options) {
     });
     this.setProperties({
         interaction: interaction,
-        active: false,
+        active:false,
         type: 'toggle',
         alive: options.alive || false,
         destroyFunction: function (evt) {
@@ -51,6 +51,7 @@ ol.control.Interaction = function (options) {
             }
         }
     });
+
     this.on('change:active', function () {
         this.get('interaction').setActive(this.get('active'));
         if (this.get('active')) {

@@ -1,5 +1,6 @@
 {
 	"server" : "https://demo.geo-solutions.it/geoserver",
-	"proxy" : "http://localhost",
-	"lang" : "EN"
+	"proxy" : "http://localhost:51529",
+	"lang" : "EN",
+	"CODE": "SHML12"
 }

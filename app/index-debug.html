@@ -5,9 +5,11 @@
     <title>A WebGIS Application</title>
     <meta name="author" content="Xiaodong Lin">
     <link href="external/ol3-3.19.1/ol.min.css" rel="stylesheet">
+    <link href="external/Semantic-UI-2.3.0/semantic.min.css" rel="stylesheet">
     <link href="css/webgis-debug.css" rel="stylesheet">
     <script type="text/javascript" src="external/ol3-3.19.1/ol-debug.js"></script>
     <script type="text/javascript" src="external/jquery-3.1.1/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="external/Semantic-UI-2.3.0/semantic.min.js"></script>
     <script type="text/javascript" src="js/webgis-debug.js"></script>
 </head>
 <body>
@@ -59,43 +61,38 @@
                 type: 'row',
                 content: [{
                     type: 'column',
-                    width: 20,
+                    width: 18,
                     content: [{
                         type: 'component',
-                        componentName: 'layertree'
+                        componentName: 'Layertree'
                     }, {
-                        type: 'stack',
-                        content: [{
-                            type: 'component',
-                            componentName: 'data'
-                        }, {
-                            type: 'component',
-                            componentName: 'datatree'
-                        }]
+                        type: 'component',
+                        componentName: 'Datatree'
                     }]
                 }, {
-                    type: 'stack',
+                    type: 'column',
                     content: [{
                         type: 'component',
-                        componentName: 'map'
+                        componentName: 'Map'
                     }, {
                         type: 'component',
-                        componentName: '3D'
+                        height: 20,
+                        componentName: 'Data'
                     }]
                 }]
             }]
         };
         var myLayoutCenter = new GoldenLayout(configCenter, $('#centerContainer'));
-        myLayoutCenter.registerComponent('layertree', function (container, componentState) {
+        myLayoutCenter.registerComponent('Layertree', function (container, componentState) {
             container.getElement().html('<div id="layertree" class="layertree"></div>');
         });
-        myLayoutCenter.registerComponent('map', function (container, componentState) {
+        myLayoutCenter.registerComponent('Map', function (container, componentState) {
             container.getElement().html('<div id="map" class="map"></div>');
         });
-        myLayoutCenter.registerComponent('data', function (container, componentState) {
+        myLayoutCenter.registerComponent('Data', function (container, componentState) {
             container.getElement().html('<div id="data" class="data"></div>');
         });
-        myLayoutCenter.registerComponent('datatree', function (container, componentState) {
+        myLayoutCenter.registerComponent('Datatree', function (container, componentState) {
             container.getElement().html('<div id="datatree" class="datatree"></div>');
         });
         myLayoutCenter.registerComponent('3D', function (container, componentState) {
@@ -143,6 +140,7 @@
                     myLayoutCenter.updateSize();
                     myLayoutBottom.updateSize();
                     iS3Project.getMap().updateSize();
+                    iS3Project.getData().updateSize();
                 }, 200);
             });
 

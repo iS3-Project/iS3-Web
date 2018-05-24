@@ -1,0 +1,37 @@
+.datatree {
+    width: 100%;
+    height: 100%;
+    float: left;
+}
+
+#datatree .semantic-full {
+    width: 100%;
+    height: calc(100% - 2.0em);
+}
+
+#datatree .semantic-menu {
+    height: 2.0em;
+    padding: 0 10px 0 10px ;
+}
+
+#datapanel tbody tr {
+    min-height: 1.0em;
+    height: 1.0em;
+}
+
+#datapanel tbody tr td {
+    padding: 0.3em 0.3em 0.3em 0.3em;
+}
+
+.ui.table thead th {
+    padding: 0.3em 0.5em 0.3em 0.5em;
+}
+
+table.dataTable.table thead th.sorting:after,
+table.dataTable.table thead th.sorting_asc:after,
+table.dataTable.table thead th.sorting_desc:after,
+table.dataTable.table thead td.sorting:after,
+table.dataTable.table thead td.sorting_asc:after,
+table.dataTable.table thead td.sorting_desc:after {
+    top: 2.5px;
+}

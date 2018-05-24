@@ -41,6 +41,8 @@ iS3.Project = function (options) {
 
     this._datatree = options.datatree || null;
 
+    this._data = options.data || null;
+
     /**
      * All the layer information. key format:'server:store:name', value: {iS3.layertree.layerDef}
      * @type {Array}
@@ -59,7 +61,7 @@ iS3.Project = function (options) {
 
     // map to iS3-Desktop
     this.projDef = null;
-    this.domains = {};
+    this.domains = null;
     this.init();
 };
 
@@ -73,6 +75,7 @@ iS3.Project.prototype.init = function() {
     $.get(iS3Project.getConfig().proxy + '/api/project/definition/' + iS3Project.getConfig().CODE)
         .done(function(data) {
             thisCpy.domains = data.data;
+            iS3Project.getDatatree().init();
         });
 };
 
@@ -166,6 +169,14 @@ iS3.Project.prototype.getDatatree = function () {
 
 iS3.Project.prototype.setDatatree = function (datatree) {
     this._datatree = datatree;
+};
+
+iS3.Project.prototype.getData = function () {
+    return this._data;
+};
+
+iS3.Project.prototype.setData = function (datatree) {
+    this._data = datatree;
 };
 
 /**

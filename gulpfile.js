@@ -31,7 +31,8 @@ var cssOrder = [
     'app/libs/goldenlayout-1.5.1/goldenlayout-base.min.css',
     'app/libs/goldenlayout-1.5.1/goldenlayout-light-theme.css',
     // 'app/libs/goldenlayout-1.5.1/goldenlayout-light-theme.min copy.css',
-    'app/libs/SemanticUI-2.2/semantic.min.css',
+    'app/libs/jsTree-3.3.5/style.min.css',
+    'app/libs/DataTables-1.10.6/datatables.min.css',
     'app/css/**/*.css'
 ];
 gulp.task('jshint', function () {
@@ -90,6 +91,9 @@ gulp.task('copyexternal', function () {
 
 gulp.task('copyimg', function () {
     gulp.src('app/img/*.*')
+        .pipe(gulp.dest('build/img'));
+
+    gulp.src(['app/libs/jsTree-3.3.5/*.png','app/libs/jsTree-3.3.5/*.gif'])
         .pipe(gulp.dest('build/img'));
 });
 

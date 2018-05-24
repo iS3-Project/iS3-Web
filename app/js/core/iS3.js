@@ -133,6 +133,13 @@ iS3.Main.prototype.init = function () {
         parentObj: iS3Project,
         target: 'datatree'
     });
-    iS3Project.setDatatree((datatree))
+    iS3Project.setDatatree(datatree);
+
+    // initial data
+    var data = new iS3.data.Data({
+        parentObj: iS3Project,
+        target: 'data'
+    });
+    iS3Project.setData(data);
 };
 

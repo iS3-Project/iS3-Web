@@ -23,9 +23,6 @@ iS3.Tree = function (options) {
 };
 
 iS3.Tree.prototype.init = function(){
-    $.get(iS3Project.getConfig().proxy + '/api/project/tree/SHML12')
-        .done(function (tree) {
-            console.log(tree);
-        });
+
 };
 

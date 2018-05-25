@@ -46,12 +46,18 @@ iS3.layertree.Layertree = function (options) {
     }
 
     var containerDiv = document.getElementById(options.target);
+
+    var buttonHolder = document.createElement('div');
+    buttonHolder.className = 'layertreeButtonHolder';
+    containerDiv.appendChild(buttonHolder);
+
     var buttonContainerDIV = document.createElement('div');
-    buttonContainerDIV.className = 'layertree-buttons';
-    containerDiv.appendChild(buttonContainerDIV);
+    buttonContainerDIV.className = 'ui large basic icon buttons';
+    buttonHolder.appendChild(buttonContainerDIV);
 
     var layerContainerDiv = document.createElement('div');
-    layerContainerDiv.className = 'layercontainer';
+    // layerContainerDiv.className = 'layercontainer';
+    layerContainerDiv.className = 'ui raised segments';
     containerDiv.appendChild(layerContainerDiv);
 
     this.parentObj = options.parentObj;

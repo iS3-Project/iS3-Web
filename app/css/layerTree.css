@@ -4,6 +4,11 @@
     float: left;
 }
 
+.layertree .layertreeButtonHolder{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 .layertree .layercontainer {
     position: relative;
     height: calc(100% - 2em);
@@ -162,4 +167,22 @@
 
 .error {
     border-color: #f00;
+}
+
+#layertree .ui.icon.button, .ui.icon.buttons .button {
+    padding: 5px 5px 5px 5px;
+}
+
+#layertree .ui.segments {
+    margin: 0 0 0 0;
+
+}
+
+#layertree .ui.segment {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#layertree .ui.segment.active {
+    background: rgba(174, 230, 255, 1);
 }

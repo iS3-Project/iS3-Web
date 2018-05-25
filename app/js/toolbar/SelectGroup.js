@@ -66,7 +66,7 @@ iS3.toolbar.SelectGroup.prototype.loadSingleSelect = function () {
     var selectSingle = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.clickSelectTip,
-        className: 'ol-singleselect ol-unselectable ol-control',
+        className: 'ol-singleselect',
         interaction: this.selectInteraction
     }).setDisabled(true);
     selectSingle.id = 'singleSelect';
@@ -86,7 +86,7 @@ iS3.toolbar.SelectGroup.prototype.loadBoxSelect = function () {
     var selectMulti = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.boxSelectTip,
-        className: 'ol-multiselect ol-unselectable ol-control',
+        className: 'ol-multiselect',
         interaction: boxInteraction
     });
     selectMulti.id = 'boxSelect';
@@ -137,7 +137,7 @@ iS3.toolbar.SelectGroup.prototype.loadPolygonSelect = function () {
     var polygonSelect = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.polygonSelectTip,
-        className: 'ol-polygonselect ol-unselectable ol-control',
+        className: 'ol-polygonselect',
         interaction: polygonDraw
     });
     polygonSelect.id = 'polygonSelect';
@@ -184,7 +184,7 @@ iS3.toolbar.SelectGroup.prototype.loadDeselect = function () {
     var deselectControl = new iS3.toolbar.BasicControl({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.removeSelectionTip,
-        className: 'ol-deselect ol-unselectable ol-control',
+        className: 'ol-deselect',
         trigger: function () {
             thisCpy.selectInteraction.getFeatures().clear();
         }

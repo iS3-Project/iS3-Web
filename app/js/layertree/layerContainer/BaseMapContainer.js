@@ -22,6 +22,7 @@ iS3.inherits(iS3.layertree.BaseMapContainer, iS3.layertree.BasicContainer);
  * @return {Element} Container
  */
 iS3.layertree.BaseMapContainer.prototype.init = function () {
-    this.enableDraggable().addLayerTitle().addVisibleCheckbox().addOpacityBar();
+    // this.enableDraggable().addLayerTitle().addVisibleCheckbox().addOpacityBar();
+    this.enableDraggable().addCheckbox();
     return this.container;
 };

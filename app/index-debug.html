@@ -14,7 +14,9 @@
 </head>
 <body>
 <div id="map-container">
-    <div id="topContainer"></div>
+    <div id="topContainer">
+        <div id="toolbar" class="toolbar"></div>
+    </div>
     <div id="centerContainer"></div>
     <div id="bottomContainer"></div>
 </div>
@@ -41,11 +43,11 @@
                 }]
             }]
         };
-        var myLayoutTop = new GoldenLayout(configTop, $('#topContainer'));
-        myLayoutTop.registerComponent('topComponent', function (container, componentState) {
-            container.getElement().html('<div id="toolbar" class="toolbar"></div>');
-        });
-        myLayoutTop.init();
+//        var myLayoutTop = new GoldenLayout(configTop, $('#topContainer'));
+//        myLayoutTop.registerComponent('topComponent', function (container, componentState) {
+//            container.getElement().html('<div id="toolbar" class="toolbar"></div>');
+//        });
+//        myLayoutTop.init();
 
         // Center layout
         var configCenter = {
@@ -136,7 +138,7 @@
             // resize events
             $(window).resize(function () {
                 setTimeout(function () {
-                    myLayoutTop.updateSize();
+//                    myLayoutTop.updateSize();
                     myLayoutCenter.updateSize();
                     myLayoutBottom.updateSize();
                     iS3Project.getMap().updateSize();

@@ -71,11 +71,11 @@ iS3.datatree.Datatree.prototype.init = function () {
                 "animation" : 200,
                 'data' : [
                     {   "text" : "Root node",
-                        "icon" : false,
+                        "icon" : "sitemap icon",
                         "state" : {"opened" : true },
                         "children" : [
-                        { "text" : "Child node 1", "icon" : false},
-                        { "text" : "Child node 2", "icon" : false}
+                        { "text" : "Child node 1", "icon" : 'anchor icon'},
+                        { "text" : "Child node 2", "icon" : 'anchor icon'}
                     ]
                     }
                 ]

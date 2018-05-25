@@ -45,7 +45,7 @@ iS3.toolbar.QueryGroup.prototype.loadClickQuery = function () {
     var clickQuery = new iS3.toolbar.BasicControl({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.queryAttributeTip,
-        className: 'iS3-clickquery ol-unselectable ol-control',
+        className: 'iS3-clickquery',
         type: 'toggle',
         trigger: function () {
             thisCpy.clickEvent = iS3.toolbar.QueryGroup.clickQueryFunction(thisCpy.parentObj);

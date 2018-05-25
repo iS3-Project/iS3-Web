@@ -126,7 +126,7 @@ iS3.Main.prototype.init = function () {
     });
     iS3Project.setToolbar(toolbar);
 
-    $('.ol-dragpan :button').click();
+    $("button[data-tooltip='Pan']").click();
 
     // initial datatree
     var datatree = new iS3.datatree.Datatree({

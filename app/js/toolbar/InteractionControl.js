@@ -15,12 +15,18 @@
  */
 ol.control.Interaction = function (options) {
 
-    var controlDiv = document.createElement('div');
-    controlDiv.className = options.className || 'ol-unselectable ol-control';
     var controlButton = document.createElement('button');
-    controlButton.textContent = options.label || 'I';
-    controlButton.title = options.tipLabel || 'Custom interaction';
-    controlDiv.appendChild(controlButton);
+    // controlButton.title = options.tipLabel || 'Custom interaction';
+    controlButton.setAttribute('data-tooltip', options.tipLabel || 'Custom interaction');
+    controlButton.setAttribute('data-position', 'bottom left');
+    controlButton.className = 'ui button';
+
+    var icon = document.createElement('i');
+    var iconName = ol.control.Interaction.getIcon(options.className);
+
+    icon.className = iconName;
+    controlButton.appendChild(icon);
+
     this.setDisabled = function (bool) {
         if (typeof bool === 'boolean') {
             controlButton.disabled = bool;
@@ -37,14 +43,14 @@ ol.control.Interaction = function (options) {
     });
     var interaction = options.interaction;
     ol.control.Control.call(this, {
-        element: controlDiv,
+        element: controlButton,
         target: options.target
     });
     this.setProperties({
         interaction: interaction,
         active:false,
         type: 'toggle',
-        alive: options.alive || false,
+        toggleGroup: options.toggleGroup || 'Global',
         destroyFunction: function (evt) {
             if (evt.element === thisCpy) {
                 this.removeInteraction(thisCpy.get('interaction'));
@@ -129,4 +135,44 @@ ol.control.Interaction.handleEvents = function (group, interaction, type) {
         }
     }, this);
     return interaction;
+};
+
+ol.control.Interaction.getIcon = function (name) {
+
+    if(name === 'ol-dragpan')
+        return 'hand paper icon';
+
+    if(name === 'ol-singleselect')
+        return 'genderless icon';
+
+    if(name === 'ol-singleselect')
+        return 'genderless icon';
+
+    if(name === 'ol-multiselect')
+        return 'cube icon';
+
+    if(name === 'ol-polygonselect')
+        return 'connectdevelop icon';
+
+    if(name === 'ol-addpoint')
+        return 'pencil alternate icon';
+
+    if(name === 'ol-addline')
+        return 'minus icon';
+
+    if(name === 'ol-addpolygon')
+        return 'square icon';
+
+    if(name === 'ol-removefeat')
+        return 'eraser icon';
+
+    if(name === 'ol-dragfeat')
+        return 'hand rock icon';
+
+    if(name === 'ol-lineString-measure')
+        return 'road icon';
+
+    if(name === 'ol-polygon-measure')
+        return 'map icon';
+    return 'question icon'
 };

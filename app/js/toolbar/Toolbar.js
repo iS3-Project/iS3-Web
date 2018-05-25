@@ -120,13 +120,7 @@ iS3.toolbar.Toolbar.prototype.addGroup = function (name) {
     }
 };
 
-/**
- * Add control to map
- *
- * @param {ol.control.Control} control Control
- * @return {iS3.toolbar.Toolbar} Return toolbar
- */
-iS3.toolbar.Toolbar.prototype.addControl = function (control) {
+iS3.toolbar.Toolbar.prototype.addControl = function (parent, control) {
     if (!(control instanceof ol.control.Control)) {
         throw new Error('Only controls can be added to the toolbar.');
     }
@@ -135,15 +129,17 @@ iS3.toolbar.Toolbar.prototype.addControl = function (control) {
             if (control.get('active')) {
                 this.groups.getAllTools().forEach(function (controlToDisable) {
                     if (controlToDisable.get('type') === 'toggle'
-                        && controlToDisable.get('alive') === false
-                        && controlToDisable !== control) {
+                        //&& controlToDisable.get('alive') === false
+                        && controlToDisable !== control
+                        && controlToDisable.get('toggleGroup') === control.get('toggleGroup')) {
                         controlToDisable.set('active', false);
                     }
                 });
             }
         }, this);
     }
-    control.setTarget(this.containerDiv);
+    // control.setTarget(this.containerDiv);
+    control.setTarget(parent);
     this.map.addControl(control);
     return this;
 };
@@ -179,9 +175,19 @@ iS3.toolbar.Toolbar.prototype.addToolGroup = function (group) {
     // var groupName = document.createElement('div');
     // groupName.className = 'ui right pointing grey basic mini label group-name';
     // groupName.textContent = group.name;
-    this.containerDiv.appendChild(groupName);
+
+    var groupHolder = document.createElement('div');
+    groupHolder.className = 'groupHolder';
+
+    var groupDiv = document.createElement('div');
+    groupDiv.className = 'ui large basic icon buttons';
+
+    groupHolder.appendChild(groupDiv);
+    this.containerDiv.appendChild(groupHolder);
+
+
     for (var i = 0; i < group.getTools().length; i++) {
-        this.addControl(group.getTools()[i]);
+        this.addControl(groupDiv, group.getTools()[i]);
     }
     return this;
 };

@@ -43,7 +43,8 @@ iS3.toolbar.ZoomGroup.prototype.init = function () {
      }, this);
      */
 
-    this.loadDragPan().loadZoomFull().loadZoomToLayer().loadZoomToSelected();
+    // this.loadDragPan().loadZoomFull().loadZoomToLayer().loadZoomToSelected();
+    this.loadDragPan().loadZoomToLayer().loadZoomToSelected();
 };
 
 /**
@@ -55,8 +56,9 @@ iS3.toolbar.ZoomGroup.prototype.loadDragPan = function () {
     var dragPan = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.pan,
-        className: 'ol-dragpan ol-unselectable ol-control',
-        interaction: new ol.interaction.DragPan(),
+        toggleGroup: 'Pan',
+        className: 'ol-dragpan',
+        interaction: new ol.interaction.DragPan()
     });
     dragPan.id = 'dragPan';
     this.add(dragPan);
@@ -90,7 +92,7 @@ iS3.toolbar.ZoomGroup.prototype.loadZoomToLayer = function () {
     var zoomToLayer = new iS3.toolbar.BasicControl({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.zoomToLayerTip,
-        className: 'ol-zoom-layer ol-unselectable ol-control',
+        className: 'ol-zoom-layer',
         trigger: function () {
             if (!layertree.selectedLayer) {
                 thisCpy.parentObj.message.textContent = 'Please select a layer';
@@ -146,7 +148,7 @@ iS3.toolbar.ZoomGroup.prototype.loadZoomToSelected = function () {
     var zoomToSelected = new iS3.toolbar.BasicControl({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.zoomToSelectedTip,
-        className: 'ol-zoom-selected ol-unselectable ol-control',
+        className: 'ol-zoom-selected',
         trigger: function () {
             if (thisCpy.parentObj.selectInteraction.getFeatures().getArray().length === 0) {
                 thisCpy.parentObj.message.textContent = 'Please select a layer';

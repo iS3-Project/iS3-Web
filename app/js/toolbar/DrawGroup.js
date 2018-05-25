@@ -73,7 +73,7 @@ iS3.toolbar.DrawGroup.prototype.loadDrawPoint = function () {
     var drawPoint = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.addPointsTip,
-        className: 'ol-addpoint ol-unselectable ol-control',
+        className: 'ol-addpoint',
         interaction: ol.control.Interaction.handleEvents(this, new ol.interaction.Draw({
             type: 'Point',
             snapTolerance: 1
@@ -93,7 +93,7 @@ iS3.toolbar.DrawGroup.prototype.loadDrawLine = function () {
     var drawLine = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.addLinesTip,
-        className: 'ol-addline ol-unselectable ol-control',
+        className: 'ol-addline',
         interaction: ol.control.Interaction.handleEvents(this, new ol.interaction.Draw({
             type: 'LineString',
             snapTolerance: 1
@@ -113,7 +113,7 @@ iS3.toolbar.DrawGroup.prototype.loadDrawPolygon = function () {
     var drawPolygon = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.addPolygonsTip,
-        className: 'ol-addpolygon ol-unselectable ol-control',
+        className: 'ol-addpolygon',
         interaction: ol.control.Interaction.handleEvents(this, new ol.interaction.Draw({
             type: 'Polygon',
             snapTolerance: 1
@@ -133,7 +133,7 @@ iS3.toolbar.DrawGroup.prototype.loadRemoveFeature = function () {
     var removeFeature = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.removeFeaturesTip,
-        className: 'ol-removefeat ol-unselectable ol-control',
+        className: 'ol-removefeat',
         interaction: new ol.interaction.RemoveFeature({
             features: this.activeFeatures
         })
@@ -150,7 +150,7 @@ iS3.toolbar.DrawGroup.prototype.loadDragFeature = function () {
     var dragFeature = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.dragFeaturesTip,
-        className: 'ol-dragfeat ol-unselectable ol-control',
+        className: 'ol-dragfeat',
         interaction: new ol.interaction.DragFeature({
             features: this.activeFeatures
         })

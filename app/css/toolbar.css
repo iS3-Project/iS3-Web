@@ -1,134 +1,140 @@
 #toolbar {
     width: 100%;
     height: 100%;
+    display: flex;
 }
 
-.toolbar .group-name {
-    position: static;
-    display: table-cell;
-    vertical-align: middle;
-    font-size: small;
+#toolbar .groupHolder {
+    padding-top: 2px;
+    padding-left: 10px;
 }
 
-.toolbar .ol-control {
-    position: static;
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0;
-    background-color: transparent;
-}
+/*.toolbar .group-name {*/
+    /*position: static;*/
+    /*display: table-cell;*/
+    /*vertical-align: middle;*/
+    /*font-size: small;*/
+/*}*/
 
-.toolbar .ol-control button {
-    padding: 0;
-    border-radius: 2px;
-    background-color: rgba(8, 86, 255, 0.5);
-    height: 1.5em;
-    width: 1.5em;
-    display: inline-block;
-    vertical-align: middle;
-    background-size: 1.3em;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    outline:none;
-}
+/*.toolbar .ol-control {*/
+    /*position: static;*/
+    /*display: table-cell;*/
+    /*vertical-align: middle;*/
+    /*padding: 0;*/
+    /*background-color: transparent;*/
+/*}*/
 
-.toolbar .ol-unselectable {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-    -webkit-tap-highlight-color: transparent;
-}
+/*.toolbar .ol-control button {*/
+    /*padding: 0;*/
+    /*border-radius: 2px;*/
+    /*background-color: rgba(8, 86, 255, 0.5);*/
+    /*height: 1.5em;*/
+    /*width: 1.5em;*/
+    /*display: inline-block;*/
+    /*vertical-align: middle;*/
+    /*background-size: 1.3em;*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 50% 50%;*/
+    /*outline:none;*/
+/*}*/
 
-.toolbar .ol-control button:hover {
-    background-color: rgba(56, 96, 255, 1.0);
-}
+/*.toolbar .ol-unselectable {*/
+    /*-webkit-touch-callout: none;*/
+    /*-webkit-user-select: none;*/
+    /*-khtml-user-select: none;*/
+       /*-moz-user-select: none;*/
+        /*-ms-user-select: none;*/
+            /*user-select: none;*/
+    /*-webkit-tap-highlight-color: transparent;*/
+/*}*/
 
-.toolbar .ol-control button.active {
-    background-color: rgba(56, 96, 255, 1.0);
-}
+/*.toolbar .ol-control button:hover {*/
+    /*background-color: rgba(56, 96, 255, 1.0);*/
+/*}*/
 
-.toolbar .ol-control button.active:hover {
-    background-color: rgba(56, 96, 255, 1.0);
-}
+/*.toolbar .ol-control button.active {*/
+    /*background-color: rgba(56, 96, 255, 1.0);*/
+/*}*/
 
-.toolbar .ol-control button:disabled {
-    background-color: rgba(0, 0, 0, .2);
-}
+/*.toolbar .ol-control button.active:hover {*/
+    /*background-color: rgba(56, 96, 255, 1.0);*/
+/*}*/
 
-.toolbar .ol-control button:disabled:hover {
-    background-color: rgba(0, 0, 0, .2);
-}
+/*.toolbar .ol-control button:disabled {*/
+    /*background-color: rgba(0, 0, 0, .2);*/
+/*}*/
 
-.toolbar .ol-singleselect button {
-    background-image: url(../img/button_select.png);
-}
+/*.toolbar .ol-control button:disabled:hover {*/
+    /*background-color: rgba(0, 0, 0, .2);*/
+/*}*/
 
-.toolbar .ol-multiselect button {
-    background-image: url(../img/button_multiselect.png);
-}
+/*.toolbar .ol-singleselect {*/
+    /*background-image: url(../img/button_select.png);*/
+/*}*/
 
-.toolbar .ol-polygonselect button {
-    background-image: url(../img/button_polygonselect.png);
-}
+/*.toolbar .ol-multiselect button {*/
+    /*background-image: url(../img/button_multiselect.png);*/
+/*}*/
 
-.toolbar .ol-deselect button {
-    background-image: url(../img/button_deselect.png);
-}
+/*.toolbar .ol-polygonselect button {*/
+    /*background-image: url(../img/button_polygonselect.png);*/
+/*}*/
 
-.toolbar .ol-addpoint button {
-    background-image: url(../img/button_addpoint.png);
-}
+/*.toolbar .ol-deselect button {*/
+    /*background-image: url(../img/button_deselect.png);*/
+/*}*/
 
-.toolbar .ol-addline button {
-    background-image: url(../img/button_addline.png);
-}
+/*.toolbar .ol-addpoint button {*/
+    /*background-image: url(../img/button_addpoint.png);*/
+/*}*/
 
-.toolbar .ol-addpolygon button {
-    background-image: url(../img/button_addpolygon.png);
-}
+/*.toolbar .ol-addline button {*/
+    /*background-image: url(../img/button_addline.png);*/
+/*}*/
 
-.toolbar .ol-removefeat button {
-    background-image: url(../img/button_removefeat.png);
-}
+/*.toolbar .ol-addpolygon button {*/
+    /*background-image: url(../img/button_addpolygon.png);*/
+/*}*/
 
-.toolbar .ol-dragfeat button {
-    background-image: url(../img/button_dragfeat.png);
-}
+/*.toolbar .ol-removefeat button {*/
+    /*background-image: url(../img/button_removefeat.png);*/
+/*}*/
 
-.toolbar .ol-dragpan button {
-    background-image: url(../img/button_handdrag.png);
-}
+/*.toolbar .ol-dragfeat button {*/
+    /*background-image: url(../img/button_dragfeat.png);*/
+/*}*/
 
-.toolbar .ol-zoom-extent button {
-    background-image: url(../img/button_zoom_extent.png);
-}
+/*.toolbar .ol-dragpan button {*/
+    /*background-image: url(../img/button_handdrag.png);*/
+/*}*/
 
-.toolbar .ol-zoom-layer button {
-    background-image: url(../img/button_zoom_layer.png);
-}
+/*.toolbar .ol-zoom-extent button {*/
+    /*background-image: url(../img/button_zoom_extent.png);*/
+/*}*/
 
-.toolbar .ol-zoom-selected button {
-    background-image: url(../img/button_zoom_selected.png);
-}
+/*.toolbar .ol-zoom-layer button {*/
+    /*background-image: url(../img/button_zoom_layer.png);*/
+/*}*/
 
-.toolbar .ol-lineString-measure button {
-    background-image: url(../img/button_lineString_measure.png);
-}
+/*.toolbar .ol-zoom-selected button {*/
+    /*background-image: url(../img/button_zoom_selected.png);*/
+/*}*/
 
-.toolbar .ol-polygon-measure button {
-    background-image: url(../img/button_polygon_measure.png);
-}
+/*.toolbar .ol-lineString-measure button {*/
+    /*background-image: url(../img/button_lineString_measure.png);*/
+/*}*/
 
-.toolbar .iS3-clickquery button {
-    background-image: url(../img/button_clickquery.png);
-}
+/*.toolbar .ol-polygon-measure button {*/
+    /*background-image: url(../img/button_polygon_measure.png);*/
+/*}*/
 
-.toolbar .iS3-gisquality button {
-    background-image: url(../img/button_gisquality.png);
-}
+/*.toolbar .iS3-clickquery button {*/
+    /*background-image: url(../img/button_clickquery.png);*/
+/*}*/
+
+/*.toolbar .iS3-gisquality button {*/
+    /*background-image: url(../img/button_gisquality.png);*/
+/*}*/
 
 .iS3-feature-popup {
     height: 40vh;

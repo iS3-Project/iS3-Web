@@ -121,7 +121,7 @@ iS3.toolbar.MeasureGroup.prototype.loadLineStringMeasure = function () {
     var lineStringMeasure = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.measureLinestringTip,
-        className: 'ol-lineString-measure ol-unselectable ol-control',
+        className: 'ol-lineString-measure',
         interaction: lineStringDraw
     });
     lineStringMeasure.id = 'lineStringMeasure';
@@ -182,7 +182,7 @@ iS3.toolbar.MeasureGroup.prototype.loadPolygonMeasure = function () {
     var polygonMeasure = new ol.control.Interaction({
         label: ' ',
         tipLabel: iS3Project.getConfig().lang.measurePolygonTip,
-        className: 'ol-polygon-measure ol-unselectable ol-control',
+        className: 'ol-polygon-measure',
         interaction: polygonDraw
     });
     polygonMeasure.id = 'polygonMeasure';

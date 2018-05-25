@@ -16,9 +16,11 @@
 iS3.layertree.BasicContainer = function (options) {
 
     var layerDiv = document.createElement('div');
-    layerDiv.className = options.buffer ? 'layer ol-unselectable buffering' : 'layer ol-unselectable';
+    // layerDiv.className = options.buffer ? 'layer ol-unselectable buffering' : 'layer ol-unselectable';
+    layerDiv.className = 'ui segment';
     layerDiv.id = options.id;
-    layerDiv.title = options.title;
+
+    this.title = options.title;
 
     this.container = layerDiv;
     this.layertree = options.parentObj;
@@ -31,7 +33,8 @@ iS3.layertree.BasicContainer = function (options) {
  * @return {Element|*} Container
  */
 iS3.layertree.BasicContainer.prototype.init = function () {
-    this.enableDraggable().addLayerTitle().addVisibleCheckbox().addOpacityBar();
+    // this.enableDraggable().addLayerTitle().addVisibleCheckbox().addOpacityBar();
+    this.enableDraggable().addCheckbox();
     if (this.layer instanceof ol.layer.Tile) {
         this.addFilter();
     }
@@ -279,5 +282,35 @@ iS3.layertree.BasicContainer.prototype.addFilter = function () {
         }
     };
 
+    return this;
+};
+
+iS3.layertree.BasicContainer.prototype.addCheckbox = function() {
+    var layer = this.layer;
+    var layerDiv = this.container;
+
+    var checkboxDiv = document.createElement('div');
+    checkboxDiv.className = 'ui checkbox';
+    layerDiv.appendChild(checkboxDiv);
+
+    var visibleBox = document.createElement('input');
+    visibleBox.type = 'checkbox';
+    visibleBox.checked = layer.getVisible();
+    visibleBox.addEventListener('change', function () {
+        if (this.checked) {
+            layer.setVisible(true);
+        } else {
+            layer.setVisible(false);
+        }
+    });
+    checkboxDiv.appendChild(iS3.domTool.stopPropagationOnEvent(visibleBox, 'click'));
+
+    var layerLabel = document.createElement('label');
+    layerLabel.addEventListener('click', function (evt) {
+        evt.stopPropagation();
+        layerDiv.click()
+    });
+    layerLabel.textContent = this.title;
+    checkboxDiv.appendChild(layerLabel);
     return this;
 };

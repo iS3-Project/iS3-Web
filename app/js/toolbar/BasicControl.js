@@ -15,16 +15,22 @@
  */
 iS3.toolbar.BasicControl = function (options) {
 
-    var controlDiv = document.createElement('div');
-    controlDiv.className = options.className || 'ol-unselectable ol-control';
     var controlButton = document.createElement('button');
-    controlButton.textContent = options.label || 'I';
-    controlButton.title = options.tipLabel || 'Custom interaction';
-    controlDiv.appendChild(controlButton);
+    // controlButton.title = options.tipLabel || 'Custom interaction';
+    controlButton.setAttribute('data-tooltip', options.tipLabel || 'Custom interaction');
+    controlButton.setAttribute('data-position', 'bottom left');
+    controlButton.className = 'ui button';
+
+    var icon = document.createElement('i');
+    var iconName = iS3.toolbar.BasicControl.getIcon(options.className);
+
+    icon.className = iconName;
+
+    controlButton.appendChild(icon);
 
 
     ol.control.Control.call(this, {
-        element: controlDiv,
+        element: controlButton,
         target: options.target
     });
     this.setDisabled = function (bool) {
@@ -40,7 +46,8 @@ iS3.toolbar.BasicControl = function (options) {
         thisCpy.setProperties({
             active: false,
             type: 'toggle',
-            alive: options.alive || false
+            toggleGroup: options.toggleGroup || 'Global'
+            // alive: options.alive || false
         });
         thisCpy.on('change:active', function () {
             if (this.get('active')) {
@@ -63,3 +70,20 @@ iS3.toolbar.BasicControl = function (options) {
     }
 };
 ol.inherits(iS3.toolbar.BasicControl, ol.control.Control);
+
+iS3.toolbar.BasicControl.getIcon = function (name) {
+
+    if(name === 'ol-zoom-layer')
+        return 'expand icon';
+
+    if(name === 'ol-zoom-selected')
+        return 'map marker alternate icon';
+
+    if(name === 'ol-deselect')
+        return 'circle notch icon';
+
+    if(name === 'iS3-clickquery')
+        return 'info icon';
+
+    return 'question icon'
+};

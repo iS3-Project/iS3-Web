@@ -21,3 +21,7 @@ iS3.ProjectDefinition = function (options) {
     this.DataServiceUrl = options.DataServiceUrl || null;
     this.GeometryServiceUrl = options.GeometryServiceUrl || null;
 };
+
+iS3.ProjectDefinition.prototype.load = function(data) {
+    $.extend(this, data.data);
+};

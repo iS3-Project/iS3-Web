@@ -11,7 +11,20 @@
 
 #datatree .semantic-menu {
     height: 2.0em;
-    padding: 0 10px 0 10px ;
+    padding: 0 2px 0 2px ;
+}
+
+#datatree .ui.segment {
+    padding: 0 0 0 0;
+}
+
+#datatree .ui[class*="top attached"].segment {
+    margin-top: 0;
+}
+
+#datatree .ui.bottom.tabular.menu .item {
+    border-radius: 0 0 .28571429rem .28571429rem;
+    border-color: rgb(212, 212, 213);
 }
 
 #datapanel tbody tr {

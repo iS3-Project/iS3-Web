@@ -94,7 +94,7 @@ gulp.task('copyimg', function () {
         .pipe(gulp.dest('build/img'));
 
     gulp.src(['app/libs/jsTree-3.3.5/*.png','app/libs/jsTree-3.3.5/*.gif'])
-        .pipe(gulp.dest('build/img'));
+        .pipe(gulp.dest('build/css'));
 });
 
 gulp.task('copydata', function () {

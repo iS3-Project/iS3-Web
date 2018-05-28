@@ -13,6 +13,12 @@ iS3.DGObjectsDefinition = function(options) {
     this.OrderSQL = null;
 };
 
+iS3.DGObjectsDefinition.load = function (data) {
+    var dgsDef = new iS3.DGObjectsDefinition({});
+    $.extend(dgsDef, data);
+    return dgsDef;
+};
+
 iS3.DGObjects = function (options) {
 
 };

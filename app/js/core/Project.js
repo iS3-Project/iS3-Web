@@ -67,14 +67,26 @@ iS3.Project = function (options) {
 
 iS3.Project.prototype.init = function() {
     var thisCpy = this;
-    $.get(iS3Project.getConfig().proxy + '/api/project/domain/' + iS3Project.getConfig().CODE)
-        .done(function(data) {
-            thisCpy.projDef = data.data;
-        });
-
     $.get(iS3Project.getConfig().proxy + '/api/project/definition/' + iS3Project.getConfig().CODE)
         .done(function(data) {
-            thisCpy.domains = data.data;
+            if (iS3.util.checkData(data)) {
+                thisCpy.projDef = new iS3.ProjectDefinition({});
+                thisCpy.projDef.load(data);
+            }
+        });
+
+    $.get(iS3Project.getConfig().proxy + '/api/project/domain/' + iS3Project.getConfig().CODE)
+        .done(function(data) {
+            thisCpy.domains = {};
+            if (iS3.util.checkData(data)) {
+                for(var key in data.data) {
+                    thisCpy.domains[key] = new iS3.Domain.load(data.data[key]);
+                }
+            }
+            iS3Project.getDatatree().init();
+        })
+        .fail(function() {
+            thisCpy.domains = {};
             iS3Project.getDatatree().init();
         });
 };

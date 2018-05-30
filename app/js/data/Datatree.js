@@ -34,6 +34,7 @@ iS3.datatree.Datatree = function (options) {
     this.layertree = options.parentObj.getLayertree();
     this.message = options.parentObj.getMessage();
 
+    // Tree selection event
     this.selectedTree = null;
     this.selectEventEmitter = new ol.Observable();
 
@@ -71,10 +72,6 @@ iS3.datatree.Datatree.prototype.init = function () {
         this.createTree(iS3Project.domains[key]);
         active = false;
     }
-
-    thisCpy.selectEventEmitter.on('change', function () {
-        console.log(thisCpy.selectedTree.Name);
-    }, thisCpy);
 
     $('.menu .item').tab();
 

@@ -100,24 +100,11 @@ iS3.toolbar.ZoomGroup.prototype.loadZoomToLayer = function () {
             }
             var layer = layertree.getLayerById(layertree.selectedLayer.id);
             if (layer instanceof ol.layer.Tile) {
-
                 var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
-                $.get(iS3Project.getConfig().proxy + '/index.php/v1/extents?layername=' + layerDef.featureType)
-                    .done(function (data) {
-                        var extentOrigin = [];
-                        var json = JSON.parse(data);
-                        extentOrigin.push(json.data.minx);
-                        extentOrigin.push(json.data.miny);
-                        extentOrigin.push(json.data.maxx);
-                        extentOrigin.push(json.data.maxy);
-                        extent = ol.proj.transformExtent(extentOrigin, ol.proj.get('EPSG:4326'),
-                            layertree.map.getView().getProjection());
-                        if (extent instanceof ol.geom.SimpleGeometry
-                            || (Object.prototype.toString.call(extent) === '[object Array]'
-                            && extent.length === 4)) {
-                            layertree.map.getView().fit(extent, layertree.map.getSize());
-                        }
-                    });
+                if (layerDef !== null) {
+                    extent = ol.proj.transformExtent(layerDef.extent, layerDef.projection,
+                        layertree.map.getView().getProjection());
+                }
             } else if (layer instanceof ol.layer.Vector) {
                 var source = layer.getSource();
                 if (source.getExtent()) {

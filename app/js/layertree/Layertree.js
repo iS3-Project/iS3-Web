@@ -67,7 +67,10 @@ iS3.layertree.Layertree = function (options) {
     this.container = containerDiv;
     this.buttonContainer = buttonContainerDIV;
     this.layerContainer = layerContainerDiv;
+
+    // Layer selection event
     this.selectedLayer = null;
+    this.selectEventEmitter = new ol.Observable();
 
     this.init();
 };
@@ -94,7 +97,6 @@ iS3.layertree.Layertree.prototype.init = function () {
      */
 
     // add listener to map layers
-    this.selectEventEmitter = new ol.Observable();
     this.map.getLayers().on('add', function (evt) {
         if (evt.element instanceof ol.layer.Vector) {
             this.createRegistry(evt.element, true);

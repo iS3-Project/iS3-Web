@@ -37,7 +37,7 @@ iS3.LayerDef = function (options) {
     this.name = options.name || null;
 
     /**
-     * @type {ol.projection}
+     * @type {ol.proj.Projection}
      */
     this.projection = options.projection || null;
 

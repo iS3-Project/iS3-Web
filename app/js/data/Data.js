@@ -35,35 +35,121 @@ iS3.data.Data = function (options) {
  * Initialization function
  */
 iS3.data.Data.prototype.init = function () {
-
     var thisCpy = this;
-
-    this.containerDiv.innerHTML = "<table id='datapanel' class='ui celled table' style='width:100%'>" +
-    "<thead> <tr> <th>Name</th> <th>Position</th> <th>Office</th> <th>Age</th> <th>Start date</th> <th>Salary</th> </tr> </thead>" +
-    "<tbody> <tr> <td>Tiger Nixon</td> <td>System Architect</td> <td>Edinburgh</td> <td>61</td> <td>2011/04/25</td> <td>$320,800</td> </tr>" +
-    "<tr> <td>Garrett Winters</td> <td>Accountant</td> <td>Tokyo</td> <td>63</td> <td>2011/07/25</td> <td>$170,750</td> </tr>" +
-    "<tr> <td>Ashton Cox</td> <td>Junior Technical Author</td> <td>San Francisco</td> <td>66</td> <td>2009/01/12</td> <td>$86,000</td> </tr>" +
-    "<tr> <td>Cedric Kelly</td> <td>Senior Javascript Developer</td> <td>Edinburgh</td> <td>22</td> <td>2012/03/29</td> <td>$433,060</td> </tr>" +
-    "<tr> <td>Airi Satou</td> <td>Accountant</td> <td>Tokyo</td> <td>33</td> <td>2008/11/28</td> <td>$162,700</td> </tr>" +
-    "<tr> <td>Brielle Williamson</td> <td>Integration Specialist</td> <td>New York</td> <td>61</td> <td>2012/12/02</td> <td>$372,000</td> </tr>";
+    this.containerDiv.innerHTML = "<table id='datapanel' class='ui celled table' style='width:100%' />";
 
     var table = $('#datapanel').DataTable({
         dom: 't',
         scrollY: 300,
         scrollCollapse: true,
         scrollX: true,
-        paging: false
+        paging: false,
+        data : {},
+        "columns" : [
+            { 'title' : 'ID', "data" : "id"},
+            { 'title' : 'Name', "data" : "name" },
+            { 'title' : 'FullName', "data" : "fullName" },
+            { 'title' : 'Description', "data" : "description" }
+        ]
+    });
+
+    iS3Project.getDatatree().selectEventEmitter.on('change', function () {
+        thisCpy.treeSelectAction();
+    }, iS3Project.getDatatree());
+};
+
+iS3.data.Data.prototype.show = function(array) {
+
+    var thisCpy = this;
+
+    $("#data").empty();
+    $("#data").append("<table id='datapanel' class='ui celled table' style='width:100%' />");
+
+    if (array.length === 0) {
+        var table = $('#datapanel').DataTable({
+            dom: 't',
+            scrollY: 300,
+            scrollCollapse: true,
+            scrollX: true,
+            paging: false,
+            data : {},
+            "columns" : [
+                { 'title' : 'ID', "data" : "id"},
+                { 'title' : 'Name', "data" : "name" },
+                { 'title' : 'FullName', "data" : "fullName" },
+                { 'title' : 'Description', "data" : "description" }
+            ]
+        });
+        return;
+    }
+
+    var table = $('#datapanel').DataTable({
+        dom: 't',
+        scrollY: 300,
+        scrollCollapse: true,
+        scrollX: true,
+        paging: false,
+        data : array,
+        "columns" : thisCpy.createHeader(array[0]),
+        "destroy": true,
+        "autoWidth": false
     });
 
     $('#datapanel tbody').on( 'click', 'tr', function () {
+        var data = table.row( this ).data();
         if ( $(this).hasClass('selected') ) {
             $(this).removeClass('selected');
+
+            iS3Project.selectedID = null;
+            iS3Project.selectDGObjectEventEmitter.changed();
         }
         else {
             table.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
+
+            iS3Project.selectedID = data['id'];
+            iS3Project.selectDGObjectEventEmitter.changed();
         }
     } );
+};
+
+iS3.data.Data.prototype.createHeader = function (object) {
+
+    var titleArray = [];
+    var idtmp = {};
+    idtmp['title'] = 'ID';
+    idtmp['data'] = 'id';
+    titleArray.push(idtmp);
+
+    var nametmp = {};
+    nametmp['title'] = 'Name';
+    nametmp['data'] = 'name';
+    titleArray.push(nametmp);
+
+    var fullNametmp = {};
+    fullNametmp['title'] = 'FullName';
+    fullNametmp['data'] = 'fullName';
+    titleArray.push(fullNametmp);
+
+    var header;
+    var content;
+    for (var key in object) {
+        header = key.toLowerCase();
+        if (header === 'id' || header === 'name' || header === 'fullname' || header === 'description') continue;
+        if ((Array.isArray(object[key]) || typeof object[key] === 'object') && object[key] !== null) continue;
+        content = header.charAt(0).toUpperCase() + header.slice(1);
+
+        var tmp = {};
+        tmp['title'] = content;
+        tmp['data'] = key;
+        titleArray.push(tmp);
+    }
+
+    var destmp = {};
+    destmp['title'] = 'Description';
+    destmp['data'] = 'description';
+    titleArray.push(destmp);
+    return titleArray;
 };
 
 iS3.data.Data.prototype.updateSize = function () {
@@ -71,4 +157,20 @@ iS3.data.Data.prototype.updateSize = function () {
     var table = $('#datapanel').DataTable();
     $('.dataTables_scrollBody').css('max-height', this.containerDiv.clientHeight - 25 + 'px');
     table.draw();
+};
+
+iS3.data.Data.prototype.treeSelectAction = function() {
+    var thisCpy = this;
+    var tree = iS3Project.getDatatree().selectedTree;
+    if (tree.Name === null || tree.RefDomainName === null) return;
+
+    $.get(iS3Project.getConfig().proxy + '/api/' + tree.RefDomainName.toLowerCase() +
+        '/' + tree.Name.toLowerCase() + '?project=' + iS3Project.getConfig().CODE)
+        .done(function(data) {
+            if (iS3.util.checkData(data)) {
+                thisCpy.show(data.data);
+            } else {
+                thisCpy.show([]);
+            }
+        })
 };

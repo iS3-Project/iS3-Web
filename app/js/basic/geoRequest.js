@@ -320,3 +320,7 @@ iS3.geoRequest.shapeToGeojson = function (file, options, callback) {
         }
     });
 };
+
+iS3.geoRequest.queryFeatureByID = function (id, layer, callback) {
+    // http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=%20demo:geo_bhl&outputFormat=application/json&cql_filter=id=1255
+};

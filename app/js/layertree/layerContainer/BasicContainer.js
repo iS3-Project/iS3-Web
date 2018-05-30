@@ -36,7 +36,7 @@ iS3.layertree.BasicContainer.prototype.init = function () {
     // this.enableDraggable().addLayerTitle().addVisibleCheckbox().addOpacityBar();
     this.enableDraggable().addCheckbox();
     if (this.layer instanceof ol.layer.Tile) {
-        this.addFilter();
+        // this.addFilter();
     }
     return this.container;
 };

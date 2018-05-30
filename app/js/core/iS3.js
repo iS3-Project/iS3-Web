@@ -40,6 +40,7 @@ iS3.Main.prototype.init = function () {
                     wrapX: false
                 }),
                 visible: true,
+                opacity: 0.3,
                 id: 'Local:Local:OpenStreet Map',
                 layertype: iS3.LayerDef.layerType.BASE_MAP
             }),

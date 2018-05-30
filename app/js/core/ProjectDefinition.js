@@ -20,8 +20,19 @@ iS3.ProjectDefinition = function (options) {
     this.LocalDatabaseName = options.LocalDatabaseName || null;
     this.DataServiceUrl = options.DataServiceUrl || null;
     this.GeometryServiceUrl = options.GeometryServiceUrl || null;
+    this.SubProjectInfos = options.SubProjectInfos || null;
+    this.EngineeringMaps = options.EngineeringMaps || null;
 };
 
-iS3.ProjectDefinition.prototype.load = function(data) {
-    $.extend(this, data.data);
+iS3.ProjectDefinition.load = function(data) {
+    var definition = new iS3.ProjectDefinition({});
+    $.extend(definition, data);
+
+    if (data.EngineeringMaps !== null) {
+        for (var key in data.EngineeringMaps) {
+            definition.EngineeringMaps[key] = iS3.EngineeringMap.load(data.EngineeringMaps[key]);
+        }
+    }
+
+    return definition;
 };

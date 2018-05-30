@@ -26,16 +26,3 @@
     border-radius: 0 0 .28571429rem .28571429rem;
     border-color: rgb(212, 212, 213);
 }
-
-#datapanel tbody tr {
-    min-height: 1.0em;
-    height: 1.0em;
-}
-
-#datapanel tbody tr td {
-    padding: 0.3em 0.3em 0.3em 0.3em;
-}
-
-#datapanel thead th {
-
-}

@@ -62,6 +62,10 @@ iS3.Project = function (options) {
     // map to iS3-Desktop
     this.projDef = null;
     this.domains = null;
+
+    // DGObject selection event
+    this.selectedID = null;
+    this.selectDGObjectEventEmitter = new ol.Observable();
     this.init();
 };
 
@@ -70,8 +74,8 @@ iS3.Project.prototype.init = function() {
     $.get(iS3Project.getConfig().proxy + '/api/project/definition/' + iS3Project.getConfig().CODE)
         .done(function(data) {
             if (iS3.util.checkData(data)) {
-                thisCpy.projDef = new iS3.ProjectDefinition({});
-                thisCpy.projDef.load(data);
+                thisCpy.projDef = iS3.ProjectDefinition.load(data.data);
+                thisCpy.initMap();
             }
         });
 
@@ -80,7 +84,7 @@ iS3.Project.prototype.init = function() {
             thisCpy.domains = {};
             if (iS3.util.checkData(data)) {
                 for(var key in data.data) {
-                    thisCpy.domains[key] = new iS3.Domain.load(data.data[key]);
+                    thisCpy.domains[key] = iS3.Domain.load(data.data[key]);
                 }
             }
             iS3Project.getDatatree().init();
@@ -89,6 +93,110 @@ iS3.Project.prototype.init = function() {
             thisCpy.domains = {};
             iS3Project.getDatatree().init();
         });
+};
+
+iS3.Project.prototype.initMap = function() {
+
+    var thisCpy = this;
+    var url = iS3Project.getConfig().server + '/wms?REQUEST=GetCapabilities&SERVICE=WMS';
+    var request = new XMLHttpRequest();
+
+    // deal with the layer information
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            thisCpy.parseCapability(request.responseText);
+
+            var maps = thisCpy.projDef.EngineeringMaps;
+            var map = null;
+            for (var key in maps) {
+                if (maps[key].MapID === 'BaseMap') {
+                    map = maps[key];
+                    break;
+                }
+            }
+
+            var layertree = thisCpy.getLayertree();
+            var CODE = iS3Project.getConfig().CODE;
+
+            var extent = ol.extent.createEmpty();
+
+            for (var key in map.LocalGdbLayersDef) {
+                var id = iS3Project.getConfig().server + ':' + CODE.toLowerCase() + ':'
+                    + map.LocalGdbLayersDef[key].Name.toLowerCase();
+                var layerDef = iS3Project.getLayerDefs()[id];
+                if (layerDef === null) continue;
+
+                extent = ol.extent.extend(extent, ol.proj.transformExtent(layerDef.extent, layerDef.projection,
+                    layertree.map.getView().getProjection()));
+                var params = {
+                    url: iS3Project.getConfig().server + '/wms',
+                    params: {
+                        LAYERS: layerDef.name,
+                        FORMAT: 'image/png',
+                        VERSION: '1.1.0'
+                    },
+                    wrapX: false
+                };
+                var layer = new ol.layer.Tile({
+                    source: new ol.source.TileWMS(params)
+                });
+
+                // the unique identification of layer, layerDiv and layerDef
+                layer.set('id', id);
+                layertree.map.addLayer(layer);
+            }
+
+            if (extent instanceof ol.geom.SimpleGeometry
+                || (Object.prototype.toString.call(extent) === '[object Array]'
+                && extent.length === 4)) {
+                layertree.map.getView().fit(extent, layertree.map.getSize());
+            }
+        }
+    };
+
+    request.open('GET', url, true);
+    request.send();
+};
+
+iS3.Project.prototype.parseCapability = function(xml) {
+    var layertree = iS3Project.getLayertree();
+    var parser = new ol.format.WMSCapabilities();
+    try {
+        var capabilities = parser.read(xml);
+        var currentProj = layertree.map.getView().getProjection().getCode();
+        var crs;
+        if (capabilities.version === '1.3.0') {
+            crs = capabilities.Capability.Layer.CRS;
+        } else {
+            crs = [currentProj];
+            messageText += ' Warning! Projection compatibility could not be checked due to version mismatch ('
+                + capabilities.version + ').';
+        }
+
+        var layers = capabilities.Capability.Layer.Layer;
+        if (layers.length > 0 && crs.indexOf(currentProj) > -1) {
+            for (var i = 0; i < layers.length; i += 1) {
+                var layerDef = new iS3.LayerDef({});
+                layerDef.id = iS3Project.getConfig().server + ':' + layers[i].Name;
+                layerDef.server = iS3Project.getConfig().server;
+                layerDef.featurePrefix = layers[i].Name.split(':')[0];
+                layerDef.name = layers[i].Name;
+                for (var key in layers[i].BoundingBox) {
+                    if (layers[i].BoundingBox[key].crs.includes('EPSG')) {
+                        layerDef.projection = ol.proj.get(layers[i].BoundingBox[key].crs);
+                        layerDef.extent = layers[i].BoundingBox[key].extent;
+                        continue;
+                    }
+                }
+                layerDef.featureType = layers[i].Name.split(':')[1];
+                layerDef.featureNS = iS3Project.getConfig().server;
+                iS3Project.getLayerDefs()[layerDef.id] = layerDef;
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+    } finally {
+    }
 };
 
 /**
@@ -187,8 +295,8 @@ iS3.Project.prototype.getData = function () {
     return this._data;
 };
 
-iS3.Project.prototype.setData = function (datatree) {
-    this._data = datatree;
+iS3.Project.prototype.setData = function (data) {
+    this._data = data;
 };
 
 /**

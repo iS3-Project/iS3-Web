@@ -4,4 +4,4 @@
 
 iS3.DGObjectsCollection = function (options) {
 
-}
+};

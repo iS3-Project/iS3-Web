@@ -164,13 +164,18 @@ iS3.data.Data.prototype.treeSelectAction = function() {
     var tree = iS3Project.getDatatree().selectedTree;
     if (tree.Name === null || tree.RefDomainName === null) return;
 
-    $.get(iS3Project.getConfig().proxy + '/api/' + tree.RefDomainName.toLowerCase() +
-        '/' + tree.Name.toLowerCase() + '?project=' + iS3Project.getConfig().CODE)
-        .done(function(data) {
-            if (iS3.util.checkData(data)) {
-                thisCpy.show(data.data);
-            } else {
-                thisCpy.show([]);
-            }
-        })
+    $.ajax({
+        url: iS3Project.getConfig().proxy + '/api/' + tree.RefDomainName.toLowerCase() +
+        '/' + tree.Name.toLowerCase() + '?project=' + iS3Project.getConfig().CODE,
+        timeout: 1000
+    }).done(function(data) {
+        if (iS3.util.checkData(data)) {
+            thisCpy.show(data.data);
+        } else {
+            thisCpy.show([]);
+        }
+    })
+        .fail(function(data) {
+            thisCpy.show([]);
+        });
 };

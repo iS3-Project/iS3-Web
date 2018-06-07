@@ -64,7 +64,8 @@ iS3.Project = function (options) {
     this.domains = null;
 
     // DGObject selection event
-    this.selectedID = null;
+    this.selectedIDs = [];
+    this.selectedLayerID = null;
     this.selectDGObjectEventEmitter = new ol.Observable();
     this.init();
 };
@@ -156,6 +157,10 @@ iS3.Project.prototype.initMap = function() {
 
     request.open('GET', url, true);
     request.send();
+
+    this.selectDGObjectEventEmitter.on('change', function() {
+        thisCpy.dgobjectSelectMapAction();
+    }, iS3Project);
 };
 
 iS3.Project.prototype.parseCapability = function(xml) {
@@ -197,6 +202,21 @@ iS3.Project.prototype.parseCapability = function(xml) {
         console.log(error.message);
     } finally {
     }
+};
+
+iS3.Project.prototype.getDomainByName = function(name) {
+    return this.domains[name];
+};
+
+iS3.Project.prototype.dgobjectSelectMapAction = function() {
+    var thisCpy = this;
+    var layerDef = iS3Project.getLayertree().getLayerDefById(thisCpy.selectedLayerID);
+    iS3Project.getToolbar().selectInteraction.getFeatures().clear();
+    iS3.geoRequest.queryFeatureByIDs(thisCpy.selectedIDs, layerDef).done(function (features) {
+        for (var i = 0; i < features.length; i++) {
+            iS3Project.getToolbar().selectInteraction.getFeatures().push(features[i]);
+        }
+    });
 };
 
 /**

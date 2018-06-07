@@ -321,6 +321,34 @@ iS3.geoRequest.shapeToGeojson = function (file, options, callback) {
     });
 };
 
-iS3.geoRequest.queryFeatureByID = function (id, layer, callback) {
+iS3.geoRequest.queryFeatureByIDs = function (ids, layerDef) {
+
+    var jdeferred = $.Deferred;
+    var deferred = jdeferred();
+
+    if(ids.length === 0) deferred.resolve([]);
+
     // http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=%20demo:geo_bhl&outputFormat=application/json&cql_filter=id=1255
+    var url = [];
+    url.push(layerDef.server + '/wfs?service=WFS');
+    url.push('&version=1.1.0&request=GetFeature&typename=');
+    url.push(layerDef.name);
+    url.push('&outputFormat=application/json&cql_filter=');
+    url.push('id=' + ids[0]);
+    for(var i = 1; i < ids.length; i++)
+        url.push(' or id=' + ids[i]);
+    url = url.join('');
+
+    var mapProj = iS3Project.getMap().getView().getProjection().getCode();
+    $.ajax({
+        url: url,
+        type: 'GET'
+    }).done(function (data) {
+        var features = new ol.format.GeoJSON().readFeatures(data, {
+            featureProjection: mapProj
+        });
+        deferred.resolve(features);
+    });
+
+    return deferred.promise();
 };

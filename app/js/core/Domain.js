@@ -37,3 +37,7 @@ iS3.Domain.load = function(data) {
 
     return domain;
 };
+
+iS3.Domain.prototype.getObjDefByName = function(name) {
+    return this.objsDefinitions[name];
+};

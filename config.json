@@ -1,6 +1,6 @@
 {
 	"server" : "http://localhost:8080/geoserver",
-	"proxy" : "http://localhost:51529",
+	"proxy" : "http://localhost:8011",
 	"lang" : "EN",
 	"CODE": "SHML12"
 }

@@ -137,22 +137,7 @@ iS3.toolbar.ZoomGroup.prototype.loadZoomToSelected = function () {
         tipLabel: iS3Project.getConfig().lang.zoomToSelectedTip,
         className: 'ol-zoom-selected',
         trigger: function () {
-            if (thisCpy.parentObj.selectInteraction.getFeatures().getArray().length === 0) {
-                thisCpy.parentObj.message.textContent = 'Please select a layer';
-                return null;
-            }
-            var features = thisCpy.parentObj.selectInteraction.getFeatures();
-            for (var i = 0; i < features.getLength(); i++) {
-                var geom = features.item(i).getGeometry();
-                if (geom instanceof ol.geom.SimpleGeometry) {
-                    extent = ol.extent.extend(extent, geom.getExtent());
-                }
-            }
-            if (extent instanceof ol.geom.SimpleGeometry
-                || (Object.prototype.toString.call(extent) === '[object Array]'
-                && extent.length === 4)) {
-                layertree.map.getView().fit(extent, layertree.map.getSize());
-            }
+            iS3.topology.zoomToSelected();
         }
     });
     zoomToSelected.id = 'zoomToSelected';

@@ -27,6 +27,7 @@ iS3.data.Data = function (options) {
     this.containerDiv = document.getElementById(options.target);
     this.layertree = options.parentObj.getLayertree();
     this.message = options.parentObj.getMessage();
+    this.table = null;
 
     this.init();
 };
@@ -52,6 +53,11 @@ iS3.data.Data.prototype.init = function () {
             { 'title' : 'Description', "data" : "description" }
         ]
     });
+    this.table = table;
+
+    iS3Project.selectDGObjectEventEmitter.on('change', function() {
+        thisCpy.dgobjectSelectAction();
+    }, iS3Project);
 
     iS3Project.getDatatree().selectEventEmitter.on('change', function () {
         thisCpy.treeSelectAction();
@@ -80,6 +86,7 @@ iS3.data.Data.prototype.show = function(array) {
                 { 'title' : 'Description', "data" : "description" }
             ]
         });
+        this.table = table;
         return;
     }
 
@@ -92,22 +99,41 @@ iS3.data.Data.prototype.show = function(array) {
         data : array,
         "columns" : thisCpy.createHeader(array[0]),
         "destroy": true,
-        "autoWidth": false
+        "autoWidth": false,
+        "createdRow" : function( row, data, index ) {
+            // Add identity if it specified
+            if( data.hasOwnProperty("id") ) {
+                row.id = "row-" + data.id;
+            }
+        }
     });
+    this.table = table;
 
     $('#datapanel tbody').on( 'click', 'tr', function () {
         var data = table.row( this ).data();
         if ( $(this).hasClass('selected') ) {
-            $(this).removeClass('selected');
+            // $(this).removeClass('selected');
 
-            iS3Project.selectedID = null;
+            iS3Project.selectedIDs = null;
+            iS3Project.selectedLayerID = null;
             iS3Project.selectDGObjectEventEmitter.changed();
         }
         else {
-            table.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
+            // table.$('tr.selected').removeClass('selected');
+            // $(this).addClass('selected');
 
-            iS3Project.selectedID = data['id'];
+            iS3Project.selectedIDs = [];
+            iS3Project.selectedIDs.push(data['id']);
+
+            var selectedTree = iS3Project.getDatatree().selectedTree;
+            if (selectedTree !== null && selectedTree.RefDomainName !== null && selectedTree.RefObjsName !== null) {
+                var domain = iS3Project.getDomainByName(selectedTree.RefDomainName);
+                var layerName = domain.getObjDefByName(selectedTree.RefObjsName).GISLayerName.toLowerCase();
+                var server = iS3Project.getConfig().server.toLowerCase();
+                var CODE = iS3Project.getConfig().CODE.toLowerCase();
+                iS3Project.selectedLayerID = server +':' + CODE + ':' + layerName;
+            }
+
             iS3Project.selectDGObjectEventEmitter.changed();
         }
     } );
@@ -159,10 +185,31 @@ iS3.data.Data.prototype.updateSize = function () {
     table.draw();
 };
 
+iS3.data.Data.prototype.dgobjectSelectAction = function() {
+    var thisCpy = this;
+    var selectedRow = this.table.$('tr.selected');
+    if(selectedRow !== null) selectedRow.removeClass('selected');
+
+    var selectedTree = iS3Project.getDatatree().selectedTree;
+    if (selectedTree !== null && selectedTree.RefDomainName !== null && selectedTree.RefObjsName !== null) {
+        var domain = iS3Project.getDomainByName(selectedTree.RefDomainName);
+        var layerName = domain.getObjDefByName(selectedTree.RefObjsName).GISLayerName.toLowerCase();
+        var server = iS3Project.getConfig().server.toLowerCase();
+        var CODE = iS3Project.getConfig().CODE.toLowerCase();
+        if (iS3Project.selectedLayerID !== server +':' + CODE + ':' + layerName) return;
+    }
+
+    if(iS3Project.selectedIDs !== null && iS3Project.selectedLayerID !== null) {
+        for (var id in iS3Project.selectedIDs) {
+            $('#row-' + iS3Project.selectedIDs[id]).addClass('selected');
+        }
+    }
+};
+
 iS3.data.Data.prototype.treeSelectAction = function() {
     var thisCpy = this;
     var tree = iS3Project.getDatatree().selectedTree;
-    if (tree.Name === null || tree.RefDomainName === null) return;
+    if (tree.Name === null || tree.RefDomainName === null) thisCpy.show([]);
 
     $.ajax({
         url: iS3Project.getConfig().proxy + '/api/' + tree.RefDomainName.toLowerCase() +

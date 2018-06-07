@@ -299,6 +299,7 @@ iS3.layertree.Layertree.prototype.addSelectEvent = function (node, isChild) {
             thisCpy.selectedLayer.classList.remove('active');
         }
         thisCpy.selectedLayer = targetNode;
+        iS3Project.selectedLayerID = thisCpy.selectedLayer.id;
         targetNode.classList.add('active');
         thisCpy.selectEventEmitter.changed();
     });

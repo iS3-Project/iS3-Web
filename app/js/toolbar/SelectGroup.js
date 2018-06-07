@@ -40,6 +40,11 @@ iS3.toolbar.SelectGroup.prototype.init = function () {
         },
         wrapX: false
     });
+
+    // this.selectInteraction.on('select', function (evt) {
+    //     this.getFeatures().clear();
+    // });
+
     this.parentObj.map.addInteraction(this.selectInteraction);
     this.selectInteraction.setActive(false);
     this.parentObj.selectInteraction = this.selectInteraction;
@@ -105,15 +110,18 @@ iS3.toolbar.SelectGroup.prototype.loadBoxSelect = function () {
                 layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + ' selected';
             } else if (source instanceof ol.source.Tile) {
                 var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
+                iS3Project.selectedIDs = [];
                 iS3.geoRequest.bboxFeaturesFromTile(layerDef, extent,
                     function (features) {
                         for (var i = 0; i < features.length; i++) {
                             var geomentryBox = boxInteraction.getGeometry();
                             if (iS3.topology.polyIntersectsPoly(geomentryBox, features[i].getGeometry()) === true) {
-                                thisCpy.selectInteraction.getFeatures().push(features[i]);
+                                iS3Project.selectedIDs.push(features[i].get('id'));
+                                //thisCpy.selectInteraction.getFeatures().push(features[i]);
                             }
                         }
                         layertree.message.textContent = features.length + ' selected';
+                        iS3Project.selectDGObjectEventEmitter.changed();
                     });
             }
         }
@@ -162,11 +170,14 @@ iS3.toolbar.SelectGroup.prototype.loadPolygonSelect = function () {
             layertree.message.textContent = thisCpy.selectInteraction.getFeatures().getLength() + ' selected';
         } else if (selectedSource instanceof ol.source.Tile) {
             var layerDef = layertree.getLayerDefById(layertree.selectedLayer.id);
+            iS3Project.selectedIDs = [];
             iS3.geoRequest.polygonFeaturesFromTile(layerDef, geomDraw).done(function (features) {
                 for (var i = 0; i < features.length; i++) {
-                    thisCpy.selectInteraction.getFeatures().push(features[i]);
+                    iS3Project.selectedIDs.push(features[i].get('id'));
+                    // thisCpy.selectInteraction.getFeatures().push(features[i]);
                 }
                 layertree.message.textContent = features.length + ' selected';
+                iS3Project.selectDGObjectEventEmitter.changed();
             });
         }
     }, this);

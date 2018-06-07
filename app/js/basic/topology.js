@@ -43,3 +43,23 @@ iS3.topology.trueDist2MapDist = function (lengthTrue) {
     line.transform(ol.proj.get('EPSG:3857'), window.iS3Project.getMap().getView().getProjection());
     return line.getLength();
 };
+
+iS3.topology.zoomToSelected = function() {
+    if (iS3Project.getToolbar().selectInteraction.getFeatures().getArray().length === 0) {
+        iS3Project.getToolbar().message.textContent = 'Please select a layer';
+        return null;
+    }
+    var extent = ol.extent.createEmpty();
+    var features = iS3Project.getToolbar().selectInteraction.getFeatures();
+    for (var i = 0; i < features.getLength(); i++) {
+        var geom = features.item(i).getGeometry();
+        if (geom instanceof ol.geom.SimpleGeometry) {
+            extent = ol.extent.extend(extent, geom.getExtent());
+        }
+    }
+    if (extent instanceof ol.geom.SimpleGeometry
+        || (Object.prototype.toString.call(extent) === '[object Array]'
+        && extent.length === 4)) {
+        iS3Project.getLayertree().map.getView().fit(extent, iS3Project.getLayertree().map.getSize());
+    }
+};

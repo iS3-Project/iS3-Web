@@ -197,7 +197,9 @@ iS3.toolbar.SelectGroup.prototype.loadDeselect = function () {
         tipLabel: iS3Project.getConfig().lang.removeSelectionTip,
         className: 'ol-deselect',
         trigger: function () {
-            thisCpy.selectInteraction.getFeatures().clear();
+            // thisCpy.selectInteraction.getFeatures().clear();
+            iS3Project.selectedIDs = [];
+            iS3Project.selectDGObjectEventEmitter.changed();
         }
     });
     deselectControl.id = 'deselect';

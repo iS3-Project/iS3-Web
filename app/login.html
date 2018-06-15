@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>iS3-Web</title>
+    <meta name="author" content="Xiaodong Lin">
+    <link href="iS3-Web/external/Semantic-UI-2.3.0/semantic.min.css" rel="stylesheet">
+    <script type="text/javascript" src="iS3-Web/external/jquery-3.1.1/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="iS3-Web/external/Semantic-UI-2.3.0/semantic.min.js"></script>
+</head>
+<body>
+<div class="ui text container" style="margin-top: 10%">
+    <div class="ui images">
+        <img src="iS3-Web/img/tongji.png" height="60px"/>
+        <img src="iS3-Web/img/iS3.png" height="60px" style="margin-left: 30px"/>
+    </div>
+    <h1>iS3-Web Login Page</h1>
+    <form class="ui form" action="iS3-Web/index.html" method="get">
+        <div class="field">
+            <label>iS3-Server</label>
+            <input type="text" name="iS3-Server" placeholder="iS3-Server">
+        </div>
+        <div class="field">
+            <label>Geoserver</label>
+            <input type="text" name="geoserver" placeholder="Geoserver">
+        </div>
+        <div class="field">
+            <label>Project CODE</label>
+            <input type="text" name="CODE" placeholder="Project CODE">
+        </div>
+        <button class="ui primary button" type="submit">Login</button>
+    </form>
+</div>
+</body>
+</html>

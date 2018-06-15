@@ -102,8 +102,8 @@ iS3.data.Data.prototype.show = function(array) {
         "autoWidth": false,
         "createdRow" : function( row, data, index ) {
             // Add identity if it specified
-            if( data.hasOwnProperty("id") ) {
-                row.id = "row-" + data.id;
+            if( data.hasOwnProperty("ID") ) {
+                row.id = "row-" + data.ID;
             }
         }
     });
@@ -123,7 +123,7 @@ iS3.data.Data.prototype.show = function(array) {
             // $(this).addClass('selected');
 
             iS3Project.selectedIDs = [];
-            iS3Project.selectedIDs.push(data['id']);
+            iS3Project.selectedIDs.push(data['ID']);
 
             var selectedTree = iS3Project.getDatatree().selectedTree;
             if (selectedTree !== null && selectedTree.RefDomainName !== null && selectedTree.RefObjsName !== null) {
@@ -144,17 +144,17 @@ iS3.data.Data.prototype.createHeader = function (object) {
     var titleArray = [];
     var idtmp = {};
     idtmp['title'] = 'ID';
-    idtmp['data'] = 'id';
+    idtmp['data'] = 'ID';
     titleArray.push(idtmp);
 
     var nametmp = {};
     nametmp['title'] = 'Name';
-    nametmp['data'] = 'name';
+    nametmp['data'] = 'Name';
     titleArray.push(nametmp);
 
     var fullNametmp = {};
     fullNametmp['title'] = 'FullName';
-    fullNametmp['data'] = 'fullName';
+    fullNametmp['data'] = 'FullName';
     titleArray.push(fullNametmp);
 
     var header;
@@ -173,7 +173,7 @@ iS3.data.Data.prototype.createHeader = function (object) {
 
     var destmp = {};
     destmp['title'] = 'Description';
-    destmp['data'] = 'description';
+    destmp['data'] = 'Description';
     titleArray.push(destmp);
     return titleArray;
 };

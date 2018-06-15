@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>A WebGIS Application</title>
+    <title>iS3-Web</title>
     <meta name="author" content="Xiaodong Lin">
     <link href="external/ol3-3.19.1/ol.min.css" rel="stylesheet">
     <link href="external/Semantic-UI-2.3.0/semantic.min.css" rel="stylesheet">
@@ -129,28 +129,58 @@
 
         document.removeEventListener('DOMContentLoaded', init);
 
-        $.getJSON('./config.json', function (json) {
-            var main = new iS3.Main({
-                config: json
+//        $.getJSON('./config.json', function (json) {
+//            var main = new iS3.Main({
+//                config: json
+//            });
+//
+//            // resize events
+//            $(window).resize(function () {
+//                setTimeout(function () {
+////                    myLayoutTop.updateSize();
+//                    myLayoutCenter.updateSize();
+//                    myLayoutBottom.updateSize();
+//                    iS3Project.getMap().updateSize();
+//                    iS3Project.getData().updateSize();
+//                }, 200);
+//            });
+//
+//            var resizeMap = document.getElementById('map');
+//            var resizecallback = function () {
+//                $(window).trigger('resize');
+//            };
+//            window.addResizeListener(resizeMap, resizecallback);
+//        });
+//
+//        var main = new iS3.Main({
+//            config: json
+//        });
+
+        var main = new iS3.Main({
+               config: {
+                   "server" : decodeURIComponent(iS3.util.getParamFromUrl("geoserver")),
+                   "proxy" : decodeURIComponent(iS3.util.getParamFromUrl("iS3-Server")),
+                   "lang" : "EN",
+                   "CODE": decodeURIComponent(iS3.util.getParamFromUrl("CODE"))
+               }
             });
 
-            // resize events
-            $(window).resize(function () {
-                setTimeout(function () {
+        // resize events
+        $(window).resize(function () {
+            setTimeout(function () {
 //                    myLayoutTop.updateSize();
-                    myLayoutCenter.updateSize();
-                    myLayoutBottom.updateSize();
-                    iS3Project.getMap().updateSize();
-                    iS3Project.getData().updateSize();
-                }, 200);
-            });
-
-            var resizeMap = document.getElementById('map');
-            var resizecallback = function () {
-                $(window).trigger('resize');
-            };
-            window.addResizeListener(resizeMap, resizecallback);
+                myLayoutCenter.updateSize();
+                myLayoutBottom.updateSize();
+                iS3Project.getMap().updateSize();
+                iS3Project.getData().updateSize();
+            }, 200);
         });
+
+        var resizeMap = document.getElementById('map');
+        var resizecallback = function () {
+            $(window).trigger('resize');
+        };
+        window.addResizeListener(resizeMap, resizecallback);
     }
 </script>
 </body>
